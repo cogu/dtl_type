@@ -95,7 +95,7 @@ The [CuTest](http://cutest.sourceforge.net/) sources are found in the test direc
 
 Memory leaks are detected using [CMemLeak](http://www.codeguru.com/cpp/misc/misc/memory/article.php/c3745/Detecting-Memory-Leaks-in-C.htm) (cygwin+Linux) 
 and valgrind (Linux only).
-To enable memory leak detection, define the symbol _DEBUG and rebuild all sources. After running your program a text file named
+To enable memory leak detection with CMemLeak, define the symbol _DEBUG and rebuild all sources. After running your program a text file named
 CMemLeak.txt is automatically generated in the current working directory.
 
 
