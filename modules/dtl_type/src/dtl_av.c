@@ -136,7 +136,7 @@ void	dtl_av_clear(dtl_av_t *this){
 
 int32_t dtl_av_len(dtl_av_t *this){
 	if(this){
-		return adt_array_len(this->pAny);
+		return adt_array_length(this->pAny);
 	}
 	return -1;
 }
