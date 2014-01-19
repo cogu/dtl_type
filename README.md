@@ -84,7 +84,7 @@ Building
 dtl_type should work with a reasonably new C compiler (use gcc with default settings). It has been tested and run on cygwin and Linux.
 
 * Compile the c source files from the [adt](https://github.com/cogu/adt)/modules/adt/src directory
-* Compile the c source files from the modules/dtl_types/src directory
+* Compile the c source files from the modules/dtl_type/src directory
 
 Testing
 =======
