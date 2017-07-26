@@ -26,7 +26,7 @@ dtl_av_t* dtl_av_new(){
 	if((this = (dtl_av_t*)malloc(sizeof(dtl_av_t)))==(dtl_av_t*)0){
 		return (dtl_av_t*)0;
 	}
-	if((this->pAny = (adt_array_t*)malloc(sizeof(adt_array_t)))==(adt_array_t*)0){
+	if((this->pAny = (adt_ary_t*)malloc(sizeof(adt_ary_t)))==(adt_ary_t*)0){
 		free(this);
 		return (dtl_av_t*)0;
 	}
@@ -59,15 +59,15 @@ void		dtl_av_delete(dtl_av_t *this){
 
 void dtl_av_create(dtl_av_t *this){
 	if(this){
-		adt_array_create(this->pAny,dtl_dv_ref_dec_void);
-		adt_array_set_fill_elem(this->pAny,(void*) &g_dtl_sv_undef);
+		adt_ary_create(this->pAny,dtl_dv_ref_dec_void);
+		adt_ary_set_fill_elem(this->pAny,(void*) &g_dtl_sv_undef);
 		this->u32Flags = ((uint32_t)DTL_DV_ARRAY);
 		this->u32RefCnt = 1;
 	}
 }
 void dtl_av_destroy(dtl_av_t *this){
 	if(this){
-		adt_array_destroy(this->pAny);
+		adt_ary_destroy(this->pAny);
 	}
 }
 
@@ -75,43 +75,43 @@ void dtl_av_destroy(dtl_av_t *this){
 //Accessors
 dtl_dv_t**	dtl_av_set(dtl_av_t *this, int32_t s32Index, dtl_dv_t *pValue){
 	if(this){
-		dtl_dv_t **tmp = (dtl_dv_t**)adt_array_get(this->pAny,s32Index);
+		dtl_dv_t **tmp = (dtl_dv_t**)adt_ary_get(this->pAny,s32Index);
 		if(tmp && *tmp != pValue){
 			dtl_dv_ref_dec(*tmp);
 		}
-		return (dtl_dv_t**) adt_array_set(this->pAny,s32Index,pValue);
+		return (dtl_dv_t**) adt_ary_set(this->pAny,s32Index,pValue);
 	}
 	return (dtl_dv_t**) 0;
 }
 
 dtl_dv_t**	dtl_av_get(dtl_av_t *this, int32_t s32Index){
 	if(this){
-		return (dtl_dv_t**) adt_array_get(this->pAny,s32Index);
+		return (dtl_dv_t**) adt_ary_get(this->pAny,s32Index);
 	}
 	return (dtl_dv_t**) 0;
 }
 
 void dtl_av_push(dtl_av_t *this, dtl_dv_t *pValue){
 	if(this){
-		adt_array_push(this->pAny,pValue);
+		adt_ary_push(this->pAny,pValue);
 	}
 }
 dtl_dv_t* dtl_av_pop(dtl_av_t *this){
 	if(this){
-		return (dtl_dv_t*) adt_array_pop(this->pAny);
+		return (dtl_dv_t*) adt_ary_pop(this->pAny);
 	}
 	return (dtl_dv_t*)0;
 }
 
 dtl_dv_t*	dtl_av_shift(dtl_av_t *this){
 	if(this){
-		return (dtl_dv_t*) adt_array_shift(this->pAny);
+		return (dtl_dv_t*) adt_ary_shift(this->pAny);
 	}
 	return (dtl_dv_t*)0;
 }
 void dtl_av_unshift(dtl_av_t *this, dtl_dv_t *pValue){
 	if(this){
-		adt_array_unshift(this->pAny,pValue);
+		adt_ary_unshift(this->pAny,pValue);
 	}
 }
 
@@ -119,30 +119,30 @@ void dtl_av_unshift(dtl_av_t *this, dtl_dv_t *pValue){
 //Utility functions
 void	dtl_av_extend(dtl_av_t *this, int32_t s32Len){
 	if(this){
-		adt_array_extend(this->pAny,s32Len);
+		adt_ary_extend(this->pAny,s32Len);
 	}
 }
 void	dtl_av_fill(dtl_av_t *this, int32_t s32Len){
 	if(this){
-		adt_array_fill(this->pAny,s32Len);
+		adt_ary_fill(this->pAny,s32Len);
 	}
 }
 
 void	dtl_av_clear(dtl_av_t *this){
 	if(this){
-		adt_array_clear(this->pAny);
+		adt_ary_clear(this->pAny);
 	}
 }
 
 int32_t dtl_av_len(dtl_av_t *this){
 	if(this){
-		return adt_array_length(this->pAny);
+		return adt_ary_length(this->pAny);
 	}
 	return -1;
 }
 bool dtl_av_exists(dtl_av_t *this, int32_t s32Index){
 	if(this){
-		return adt_array_exists(this->pAny,s32Index);
+		return adt_ary_exists(this->pAny,s32Index);
 	}
 	return false;
 }

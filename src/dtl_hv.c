@@ -71,7 +71,11 @@ void dtl_hv_set(dtl_hv_t *this, const char *pKey, uint32_t u32KeyLen, dtl_dv_t *
 
 dtl_dv_t* dtl_hv_get(dtl_hv_t *this, const char *pKey, uint32_t u32KeyLen){
 	if(this){
-		return (dtl_dv_t*) adt_hash_get(this->pAny,pKey,u32KeyLen);
+	   void **result = adt_hash_get(this->pAny,pKey,u32KeyLen);
+	   if (result != 0)
+	   {
+	      return (dtl_dv_t*) *result;
+	   }
 	}
 	return (dtl_dv_t*) 0;
 }

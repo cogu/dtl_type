@@ -11,6 +11,7 @@
 #include <assert.h>
 #include <string.h>
 #include <ctype.h>
+#include <stdio.h>
 #include "dtl_sv.h"
 #include "CMemLeak.h"
 
