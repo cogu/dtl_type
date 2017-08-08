@@ -250,6 +250,19 @@ void dtl_sv_set_cstr(dtl_sv_t *this, const char* str){
 	}
 }
 
+void dtl_sv_set_bstr(dtl_sv_t *self, const char *pBegin, const char *pEnd){
+   if ( (self != 0) && (pBegin != 0) && (pEnd != 0) && (pBegin<=pEnd) ){
+      uint32_t len = (uint32_t) (pEnd-pBegin);
+      char *str = (char*) malloc(len+1);
+      if(self != 0){
+         dtl_sv_set_type(self,DTL_SV_CSTR);
+         memcpy(str,pBegin,len);
+         str[len]=0;
+         self->pAny->cstr = str;
+      }
+   }
+}
+
 void dtl_sv_set_dv(dtl_sv_t *this, dtl_dv_t *dv){
 	if(this){
 		if(dtl_sv_type(this)==DTL_SV_DV){

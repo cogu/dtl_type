@@ -52,6 +52,11 @@ void dtl_dv_delete(dtl_dv_t* dv ){
 		}
 	}
 }
+
+void dtl_dv_vdelete(void *arg){
+   dtl_dv_delete((dtl_dv_t*) arg);
+}
+
 void dtl_dv_ref_inc(dtl_dv_t* dv){
 	if(dv) dv->u32RefCnt++;
 }

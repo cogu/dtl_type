@@ -87,7 +87,9 @@ void dtl_sv_set_dbl(dtl_sv_t *this, double dbl);
 void dtl_sv_set_bool(dtl_sv_t *this, bool bl);
 void dtl_sv_set_ptr(dtl_sv_t *this, void *p, void (*pDestructor)(void*));
 void dtl_sv_set_cstr(dtl_sv_t *this, const char* str);
+void dtl_sv_set_bstr(dtl_sv_t *self, const char *pBegin, const char *pEnd);
 void dtl_sv_set_dv(dtl_sv_t *this, dtl_dv_t *dv);
+
 
 
 //Getters

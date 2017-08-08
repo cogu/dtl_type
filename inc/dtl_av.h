@@ -38,7 +38,7 @@ void		dtl_av_unshift(dtl_av_t *this, dtl_dv_t *pValue);
 void	dtl_av_extend(dtl_av_t *this, int32_t s32Len);
 void	dtl_av_fill(dtl_av_t *this, int32_t s32Len);
 void	dtl_av_clear(dtl_av_t *this);
-int32_t dtl_av_len(dtl_av_t *this);
+int32_t dtl_av_length(dtl_av_t *this);
 bool	dtl_av_exists(dtl_av_t *this, int32_t s32Index);
 
 /*

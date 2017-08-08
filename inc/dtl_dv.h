@@ -36,6 +36,7 @@ typedef enum dtl_dv_type_id{
 /***************** Public Function Declarations *******************/
 dtl_dv_t *dtl_dv_null();
 void dtl_dv_delete(dtl_dv_t* dv );
+void dtl_dv_vdelete(void *arg);
 void dtl_dv_ref_inc(dtl_dv_t* dv);
 void dtl_dv_ref_dec(dtl_dv_t* dv);
 dtl_dv_type_id dtl_dv_type(dtl_dv_t* dv);

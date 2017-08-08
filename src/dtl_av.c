@@ -134,7 +134,7 @@ void	dtl_av_clear(dtl_av_t *this){
 	}
 }
 
-int32_t dtl_av_len(dtl_av_t *this){
+int32_t dtl_av_length(dtl_av_t *this){
 	if(this){
 		return adt_ary_length(this->pAny);
 	}
