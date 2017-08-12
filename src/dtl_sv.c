@@ -13,7 +13,16 @@
 #include <ctype.h>
 #include <stdio.h>
 #include "dtl_sv.h"
+#ifdef MEM_LEAK_CHECK
 #include "CMemLeak.h"
+#endif
+
+#ifdef _MSC_VER
+#define STRDUP _strdup
+#else
+#define STRDUP strdup
+#endif
+
 
 /**************** Public Variable Declarations *******************/
 static dtl_svx_t g_dtl_svx_undef = {0};
@@ -47,9 +56,16 @@ void dtl_sv_delete(dtl_sv_t* this){
 void dtl_sv_create(dtl_sv_t* this){
 	if(this){
 		this->pAny = (dtl_svx_t*) malloc(sizeof(dtl_svx_t));
-		assert(this->pAny);
-		this->u32Flags = ((uint32_t)DTL_DV_SCALAR);
-		this->u32RefCnt = 1;
+		if (this->pAny != 0)
+		{
+		   memset(this->pAny, 0, sizeof(dtl_svx_t));
+	      this->u32Flags = ((uint32_t)DTL_DV_SCALAR);
+	      this->u32RefCnt = 1;
+		}
+		else
+		{
+		   assert(0);
+		}
 	}
 }
 
@@ -246,7 +262,10 @@ void dtl_sv_set_ptr(dtl_sv_t *this, void *p, void (*pDestructor)(void*)){
 void dtl_sv_set_cstr(dtl_sv_t *this, const char* str){
 	if(this){
 		dtl_sv_set_type(this,DTL_SV_CSTR);
-		this->pAny->cstr = strdup(str);
+		if (this->pAny->cstr != 0){
+		   free(this->pAny->cstr);
+		}
+		this->pAny->cstr = STRDUP(str);
 	}
 }
 
