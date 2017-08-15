@@ -14,7 +14,7 @@
 #include "dtl_av.h"
 
 typedef struct dtl_hv_tag{
-  DTL_DV_HEAD(adt_hash_t);
+  DTL_DV_HEAD(adt_hash_t)
 } dtl_hv_t;
 
 /***************** Public Function Declarations *******************/

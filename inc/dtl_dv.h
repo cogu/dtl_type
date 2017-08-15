@@ -21,7 +21,7 @@
 
 
 typedef struct dtl_dv_tag{
-	DTL_DV_HEAD(void);
+	DTL_DV_HEAD(void)
 } dtl_dv_t;
 
 typedef enum dtl_dv_type_id{

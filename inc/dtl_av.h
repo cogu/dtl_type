@@ -14,7 +14,7 @@
 #include "adt_ary.h"
 
 typedef struct dtl_av_tag{
-  DTL_DV_HEAD(adt_ary_t);
+  DTL_DV_HEAD(adt_ary_t)
 } dtl_av_t;
 
 /***************** Public Function Declarations *******************/

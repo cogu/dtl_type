@@ -36,7 +36,7 @@ typedef union sv_tag{
 
 
 typedef struct dtl_sv_tag{
-	DTL_DV_HEAD(dtl_svx_t);
+	DTL_DV_HEAD(dtl_svx_t)
 }dtl_sv_t;
 
 typedef enum dtl_sv_type_tag{
