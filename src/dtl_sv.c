@@ -514,9 +514,9 @@ void* dtl_sv_get_ptr(dtl_sv_t *this){
 		case DTL_SV_UNDEF:
 			break;
 		case DTL_SV_I32:
-			return (void*) this->pAny->i32;
+			return (void*) ((long) this->pAny->i32);
 		case DTL_SV_U32:
-			return (void*) this->pAny->u32;
+			return (void*) ((long) this->pAny->u32);
 		case DTL_SV_I64:
 			break;
 		case DTL_SV_U64:
@@ -623,11 +623,11 @@ void dtl_sv_to_string(dtl_sv_t *sv,adt_str_t *str){
 				break;
 			case DTL_SV_I64:
 				isNum = 1;
-				sprintf(numBuf,"%lld",dtl_sv_get_i64(sv));
+				sprintf(numBuf,"%lld", (long long int) dtl_sv_get_i64(sv));
 				break;
 			case DTL_SV_U64:
 				isNum = 1;
-				sprintf(numBuf,"%llu",dtl_sv_get_u64(sv));
+				sprintf(numBuf,"%llu", (long long unsigned int) dtl_sv_get_u64(sv));
 				break;
 			case DTL_SV_FLT:
 				isNum = 1;
