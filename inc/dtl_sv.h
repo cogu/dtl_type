@@ -61,9 +61,9 @@ extern dtl_sv_t g_dtl_sv_undef;
 /***************** Public Function Declarations *******************/
 //Constructor/Destructor
 dtl_sv_t* dtl_sv_new(void);
-void dtl_sv_delete(dtl_sv_t* this);
-void dtl_sv_create(dtl_sv_t* this);
-void dtl_sv_destroy(dtl_sv_t* this);
+void dtl_sv_delete(dtl_sv_t* self);
+void dtl_sv_create(dtl_sv_t* self);
+void dtl_sv_destroy(dtl_sv_t* self);
 dtl_sv_t *dtl_sv_make_i32(int32_t i32);
 dtl_sv_t *dtl_sv_make_u32(uint32_t u32);
 dtl_sv_t *dtl_sv_make_i64(int64_t i64);
@@ -75,38 +75,37 @@ dtl_sv_t *dtl_sv_make_ptr(void *ptr,void (*pDestructor)(void*));
 dtl_sv_t *dtl_sv_make_cstr(const char* str);
 dtl_sv_t *dtl_sv_make_dv(dtl_dv_t *dv);
 
-dtl_sv_type_id dtl_sv_type(dtl_sv_t* this);
+dtl_sv_type_id dtl_sv_type(dtl_sv_t* self);
 
 //Setters
-void dtl_sv_set_i32(dtl_sv_t *this, int32_t i32);
-void dtl_sv_set_u32(dtl_sv_t *this, uint32_t u32);
-void dtl_sv_set_i64(dtl_sv_t *this, int64_t i64);
-void dtl_sv_set_u64(dtl_sv_t *this, uint64_t u64);
-void dtl_sv_set_flt(dtl_sv_t *this, float flt);
-void dtl_sv_set_dbl(dtl_sv_t *this, double dbl);
-void dtl_sv_set_bool(dtl_sv_t *this, bool bl);
-void dtl_sv_set_ptr(dtl_sv_t *this, void *p, void (*pDestructor)(void*));
-void dtl_sv_set_cstr(dtl_sv_t *this, const char* str);
+void dtl_sv_set_i32(dtl_sv_t *self, int32_t i32);
+void dtl_sv_set_u32(dtl_sv_t *self, uint32_t u32);
+void dtl_sv_set_i64(dtl_sv_t *self, int64_t i64);
+void dtl_sv_set_u64(dtl_sv_t *self, uint64_t u64);
+void dtl_sv_set_flt(dtl_sv_t *self, float flt);
+void dtl_sv_set_dbl(dtl_sv_t *self, double dbl);
+void dtl_sv_set_bool(dtl_sv_t *self, bool bl);
+void dtl_sv_set_ptr(dtl_sv_t *self, void *p, void (*pDestructor)(void*));
+void dtl_sv_set_cstr(dtl_sv_t *self, const char* str);
 void dtl_sv_set_bstr(dtl_sv_t *self, const char *pBegin, const char *pEnd);
-void dtl_sv_set_dv(dtl_sv_t *this, dtl_dv_t *dv);
+void dtl_sv_set_dv(dtl_sv_t *self, dtl_dv_t *dv);
 
 
 
 //Getters
-int32_t dtl_sv_get_i32(dtl_sv_t *this);
-uint32_t dtl_sv_get_u32(dtl_sv_t *this);
-int64_t dtl_sv_get_i64(dtl_sv_t *this);
-uint64_t dtl_sv_get_u64(dtl_sv_t *this);
-float dtl_sv_get_flt(dtl_sv_t *this);
-double dtl_sv_get_dbl(dtl_sv_t *this);
-bool dtl_sv_get_bool(dtl_sv_t *this);
-void* dtl_sv_get_ptr(dtl_sv_t *this);
-const char *dtl_sv_get_cstr(dtl_sv_t *this);
-dtl_dv_t *dtl_sv_get_dv(dtl_sv_t *this);
-void dtl_sv_to_string(dtl_sv_t *this,adt_str_t *str);
+int32_t dtl_sv_get_i32(dtl_sv_t *self);
+uint32_t dtl_sv_get_u32(dtl_sv_t *self);
+int64_t dtl_sv_get_i64(dtl_sv_t *self);
+uint64_t dtl_sv_get_u64(dtl_sv_t *self);
+float dtl_sv_get_flt(dtl_sv_t *self);
+double dtl_sv_get_dbl(dtl_sv_t *self);
+bool dtl_sv_get_bool(dtl_sv_t *self);
+void* dtl_sv_get_ptr(dtl_sv_t *self);
+const char *dtl_sv_get_cstr(dtl_sv_t *self);
+dtl_dv_t *dtl_sv_get_dv(dtl_sv_t *self);
+void dtl_sv_to_string(dtl_sv_t *self,adt_str_t *str);
 
 //Macros
 #define dtl_sv_undef() &g_dtl_sv_undef
-
 
 #endif //DTL_SV_H__

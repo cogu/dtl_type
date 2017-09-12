@@ -47,5 +47,4 @@ void dtl_dv_ref_dec_void(void* ptr);
 #define dtl_ref_inc(dv) dtl_dv_ref_inc((dtl_dv_t*)dv)
 #define dtl_ref_dec(dv) dtl_dv_ref_dec((dtl_dv_t*)dv)
 
-
 #endif //DTL_DV_H__
