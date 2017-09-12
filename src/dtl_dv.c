@@ -16,19 +16,19 @@
 
 
 /**************** Private Function Declarations *******************/
-void dtl_dv_create(dtl_dv_t *this);
+void dtl_dv_create(dtl_dv_t *self);
 
 /**************** Private Variable Declarations *******************/
 
 
 /****************** Public Function Definitions *******************/
 dtl_dv_t *dtl_dv_null(void){
-	dtl_dv_t *this;
-	if((this = (dtl_dv_t*)malloc(sizeof(dtl_dv_t)))==(dtl_dv_t*)0){
+	dtl_dv_t *self;
+	if((self = (dtl_dv_t*)malloc(sizeof(dtl_dv_t)))==(dtl_dv_t*)0){
 		return (dtl_dv_t*)0;
 	}
-	dtl_dv_create(this);
-	return this;
+	dtl_dv_create(self);
+	return self;
 }
 
 void dtl_dv_delete(dtl_dv_t* dv ){
@@ -78,11 +78,11 @@ void dtl_dv_ref_dec_void(void* ptr){
 }
 
 /***************** Private Function Definitions *******************/
-void dtl_dv_create(dtl_dv_t *this){
-	if(this){
-		this->pAny = (void*) 0;
-		this->u32RefCnt = 1;
-		this->u32Flags =  ((uint32_t)DTL_DV_NULL);
+void dtl_dv_create(dtl_dv_t *self){
+	if(self){
+		self->pAny = (void*) 0;
+		self->u32RefCnt = 1;
+		self->u32Flags =  ((uint32_t)DTL_DV_NULL);
 	}
 }
 
