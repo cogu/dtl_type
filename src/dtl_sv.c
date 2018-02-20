@@ -76,7 +76,6 @@ void dtl_sv_destroy(dtl_sv_t* self){
 			if(self->pAny->cstr) free(self->pAny->cstr);
 			break;
 		case DTL_SV_PTR:
-			break;
 			if(self->pAny->ptr.pDestructor){
 				self->pAny->ptr.pDestructor(self->pAny->ptr.p);
 			}
