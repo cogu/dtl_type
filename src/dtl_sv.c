@@ -38,11 +38,10 @@ static void dtl_sv_ztrim(char *str);
 /****************** Public Function Definitions *******************/
 //Constructor/Destructor
 dtl_sv_t* dtl_sv_new(void){
-	dtl_sv_t *self;
-	if((self = (dtl_sv_t*)malloc(sizeof(dtl_sv_t)))==(dtl_sv_t*)0){
-		return (dtl_sv_t*)0;
+	dtl_sv_t *self = (dtl_sv_t*)malloc(sizeof(dtl_sv_t));
+	if((self !=(dtl_sv_t*)0){
+		dtl_sv_create(self);
 	}
-	dtl_sv_create(self);
 	return self;
 }
 
@@ -76,7 +75,6 @@ void dtl_sv_destroy(dtl_sv_t* self){
 			if(self->pAny->cstr) free(self->pAny->cstr);
 			break;
 		case DTL_SV_PTR:
-			break;
 			if(self->pAny->ptr.pDestructor){
 				self->pAny->ptr.pDestructor(self->pAny->ptr.p);
 			}
