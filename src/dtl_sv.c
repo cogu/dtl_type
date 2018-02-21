@@ -39,7 +39,7 @@ static void dtl_sv_ztrim(char *str);
 //Constructor/Destructor
 dtl_sv_t* dtl_sv_new(void){
 	dtl_sv_t *self = (dtl_sv_t*)malloc(sizeof(dtl_sv_t));
-	if((self !=(dtl_sv_t*)0){
+	if(self !=(dtl_sv_t*)0){
 		dtl_sv_create(self);
 	}
 	return self;
