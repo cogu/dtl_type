@@ -173,7 +173,7 @@ dtl_sv_t *dtl_sv_make_dv(dtl_dv_t *dv){
 }
 
 
-dtl_sv_type_id dtl_sv_type(dtl_sv_t* self){
+dtl_sv_type_id dtl_sv_type(const dtl_sv_t* self){
 	if(self){
 		uint8_t u8Type = (uint8_t) ((self->u32Flags & DTL_SV_TYPE_MASK)>>DTL_SV_TYPE_SHIFT);
 		return (dtl_sv_type_id) u8Type;
@@ -293,7 +293,7 @@ void dtl_sv_set_dv(dtl_sv_t *self, dtl_dv_t *dv){
 
 
 //Getters
-int32_t dtl_sv_get_i32(dtl_sv_t *self){
+int32_t dtl_sv_get_i32(const dtl_sv_t *self){
 	if(self){
 		switch(dtl_sv_type(self)){
 		case DTL_SV_UNDEF:
@@ -322,7 +322,7 @@ int32_t dtl_sv_get_i32(dtl_sv_t *self){
 	}
 	return 0;
 }
-uint32_t dtl_sv_get_u32(dtl_sv_t *self){
+uint32_t dtl_sv_get_u32(const dtl_sv_t *self){
 	if(self){
 		switch(dtl_sv_type(self)){
 		case DTL_SV_UNDEF:
@@ -352,7 +352,7 @@ uint32_t dtl_sv_get_u32(dtl_sv_t *self){
 	return 0;
 }
 
-int64_t dtl_sv_get_i64(dtl_sv_t *self){
+int64_t dtl_sv_get_i64(const dtl_sv_t *self){
 	if(self){
 		switch(dtl_sv_type(self)){
 		case DTL_SV_UNDEF:
@@ -382,7 +382,7 @@ int64_t dtl_sv_get_i64(dtl_sv_t *self){
 	return 0;
 }
 
-uint64_t dtl_sv_get_u64(dtl_sv_t *self){
+uint64_t dtl_sv_get_u64(const dtl_sv_t *self){
 	if(self){
 		switch(dtl_sv_type(self)){
 		case DTL_SV_UNDEF:
@@ -413,7 +413,7 @@ uint64_t dtl_sv_get_u64(dtl_sv_t *self){
 }
 
 
-float dtl_sv_get_flt(dtl_sv_t *self){
+float dtl_sv_get_flt(const dtl_sv_t *self){
 	if(self){
 		switch(dtl_sv_type(self)){
 		case DTL_SV_UNDEF:
@@ -443,7 +443,7 @@ float dtl_sv_get_flt(dtl_sv_t *self){
 	return 0.0;
 }
 
-double dtl_sv_get_dbl(dtl_sv_t *self){
+double dtl_sv_get_dbl(const dtl_sv_t *self){
 	if(self){
 		switch(dtl_sv_type(self)){
 		case DTL_SV_UNDEF:
@@ -473,7 +473,7 @@ double dtl_sv_get_dbl(dtl_sv_t *self){
 	return 0.0;
 }
 
-bool dtl_sv_get_bool(dtl_sv_t *self){
+bool dtl_sv_get_bool(const dtl_sv_t *self){
 	if(self){
 		switch(dtl_sv_type(self)){
 		case DTL_SV_UNDEF:
@@ -506,7 +506,7 @@ bool dtl_sv_get_bool(dtl_sv_t *self){
 	return false;
 }
 
-void* dtl_sv_get_ptr(dtl_sv_t *self){
+void* dtl_sv_get_ptr(const dtl_sv_t *self){
 	if(self){
 		switch(dtl_sv_type(self)){
 		case DTL_SV_UNDEF:
@@ -539,7 +539,7 @@ void* dtl_sv_get_ptr(dtl_sv_t *self){
 	return (void*)0;
 }
 
-const char* dtl_sv_get_cstr(dtl_sv_t *self){
+const char* dtl_sv_get_cstr(const dtl_sv_t *self){
 	if(self){
 		switch(dtl_sv_type(self)){
 		case DTL_SV_UNDEF:
@@ -570,7 +570,7 @@ const char* dtl_sv_get_cstr(dtl_sv_t *self){
 	return (const char*)0;
 }
 
-dtl_dv_t *dtl_sv_get_dv(dtl_sv_t *self){
+dtl_dv_t *dtl_sv_get_dv(const dtl_sv_t *self){
 	if(self){
 		switch(dtl_sv_type(self)){
 		case DTL_SV_UNDEF:
@@ -601,7 +601,7 @@ dtl_dv_t *dtl_sv_get_dv(dtl_sv_t *self){
 	return (dtl_dv_t*)0;
 }
 
-void dtl_sv_to_string(dtl_sv_t *sv,adt_str_t *str){
+void dtl_sv_to_string(const dtl_sv_t *sv,adt_str_t *str){
 	if(sv && str){
 		adt_str_clear(str);
 		char *numBuf = (char*) malloc(1080);
