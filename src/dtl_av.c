@@ -49,7 +49,7 @@ dtl_av_t* dtl_av_make(dtl_dv_t** ppValue, int32_t s32Len){
 	return self;
 }
 
-void		dtl_av_delete(dtl_av_t *self){
+void dtl_av_delete(dtl_av_t *self){
 	if(self){
 		dtl_av_destroy(self);
 		free(self->pAny);
@@ -84,7 +84,7 @@ dtl_dv_t**	dtl_av_set(dtl_av_t *self, int32_t s32Index, dtl_dv_t *pValue){
 	return (dtl_dv_t**) 0;
 }
 
-dtl_dv_t**	dtl_av_get(dtl_av_t *self, int32_t s32Index){
+dtl_dv_t**	dtl_av_get(const dtl_av_t *self, int32_t s32Index){
 	if(self){
 		return (dtl_dv_t**) adt_ary_get(self->pAny,s32Index);
 	}
@@ -134,13 +134,13 @@ void	dtl_av_clear(dtl_av_t *self){
 	}
 }
 
-int32_t dtl_av_length(dtl_av_t *self){
+int32_t dtl_av_length(const dtl_av_t *self){
 	if(self){
 		return adt_ary_length(self->pAny);
 	}
 	return -1;
 }
-bool dtl_av_exists(dtl_av_t *self, int32_t s32Index){
+bool dtl_av_exists(const dtl_av_t *self, int32_t s32Index){
 	if(self){
 		return adt_ary_exists(self->pAny,s32Index);
 	}

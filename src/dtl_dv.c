@@ -66,7 +66,7 @@ void dtl_dv_ref_dec(dtl_dv_t* dv){
 		if(--dv->u32RefCnt == 0) dtl_dv_delete(dv);
 	}
 }
-dtl_dv_type_id dtl_dv_type(dtl_dv_t* dv){
+dtl_dv_type_id dtl_dv_type(const dtl_dv_t* dv){
 	uint8_t u8Type;
 	if(!dv) return DTL_DV_INVALID;
 	u8Type = (uint8_t) ( (dv->u32Flags & DTL_DV_TYPE_MASK) >> DTL_DV_TYPE_SHIFT);

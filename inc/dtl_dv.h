@@ -39,7 +39,7 @@ void dtl_dv_delete(dtl_dv_t* dv );
 void dtl_dv_vdelete(void *arg);
 void dtl_dv_ref_inc(dtl_dv_t* dv);
 void dtl_dv_ref_dec(dtl_dv_t* dv);
-dtl_dv_type_id dtl_dv_type(dtl_dv_t* dv);
+dtl_dv_type_id dtl_dv_type(const dtl_dv_t* dv);
 
 void dtl_dv_ref_dec_void(void* ptr);
 

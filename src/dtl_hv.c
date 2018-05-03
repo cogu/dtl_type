@@ -69,13 +69,13 @@ void dtl_hv_set(dtl_hv_t *self, const char *pKey, uint32_t u32KeyLen, dtl_dv_t *
 	}
 }
 
-dtl_dv_t* dtl_hv_get(dtl_hv_t *self, const char *pKey, uint32_t u32KeyLen){
+dtl_dv_t* dtl_hv_get(const dtl_hv_t *self, const char *pKey, uint32_t u32KeyLen){
 	if(self){
-	   void **result = adt_hash_get(self->pAny,pKey,u32KeyLen);
-	   if (result != 0)
-	   {
-	      return (dtl_dv_t*) *result;
-	   }
+		void **result = adt_hash_get(self->pAny,pKey,u32KeyLen);
+		if (result != 0)
+		{
+			return (dtl_dv_t*) *result;
+		}
 	}
 	return (dtl_dv_t*) 0;
 }
@@ -109,14 +109,14 @@ dtl_dv_t* dtl_hv_iter_next(dtl_hv_t *self,const char **ppKey,uint32_t *pKeyLen){
 
 
 //Utility functions
-uint32_t dtl_hv_size(dtl_hv_t *self){
+uint32_t dtl_hv_size(const dtl_hv_t *self){
 	if(self){
 		return adt_hash_size(self->pAny);
 	}
 	return (uint32_t) 0;
 }
 
-bool dtl_hv_exists(dtl_hv_t *self, const char *pKey, uint32_t u32KeyLen){
+bool dtl_hv_exists(const dtl_hv_t *self, const char *pKey, uint32_t u32KeyLen){
 	if(self){
 		return adt_hash_exists(self->pAny,pKey,u32KeyLen);
 	}
