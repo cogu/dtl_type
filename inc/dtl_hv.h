@@ -26,9 +26,9 @@ void 	dtl_hv_destroy(dtl_hv_t *self);
 
 
 //Accessors
-void	dtl_hv_set(dtl_hv_t *self, const char *pKey, uint32_t u32KeyLen, dtl_dv_t *pValue);
-dtl_dv_t*	dtl_hv_get(const dtl_hv_t *self, const char *pKey, uint32_t u32KeyLen);
-dtl_dv_t*	dtl_hv_remove(dtl_hv_t *self, const char *pKey, uint32_t u32KeyLen);
+void	dtl_hv_set(dtl_hv_t *self, const char *pKey, dtl_dv_t *pValue);
+dtl_dv_t*	dtl_hv_get(const dtl_hv_t *self, const char *pKey);
+dtl_dv_t*	dtl_hv_remove(dtl_hv_t *self, const char *pKey);
 void	dtl_hv_iter_init(dtl_hv_t *self);
 
 /**
@@ -42,7 +42,7 @@ dtl_dv_t*	dtl_hv_iter_next(dtl_hv_t *self,const char **ppKey,uint32_t *pKeyLen);
 
 
 //Utility functions
-uint32_t 	dtl_hv_size(const dtl_hv_t *self);
+uint32_t 	dtl_hv_length(const dtl_hv_t *self);
 bool		dtl_hv_exists(const dtl_hv_t *self, const char *pKey, uint32_t u32KeyLen);
 uint32_t	dtl_hv_keys(dtl_hv_t *self,dtl_av_t *pArray);
 

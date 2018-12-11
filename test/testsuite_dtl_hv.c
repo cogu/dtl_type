@@ -21,18 +21,18 @@ void test_dtl_hv_get_set(CuTest* tc){
 	dtl_hv_t *hv = dtl_hv_new();
 	CuAssertPtrNotNull(tc, hv);
 	dtl_sv_t *sv = dtl_sv_make_i32(82);
-	dtl_hv_set(hv,"First",0,(dtl_dv_t*) dtl_sv_make_i32(1));
-	dtl_hv_set(hv,"Second",0,(dtl_dv_t*) dtl_sv_make_i32(2));
-	dtl_hv_set(hv,"Third",0,(dtl_dv_t*) dtl_sv_make_i32(4));
-	dtl_hv_set(hv,"Fourth",0,(dtl_dv_t*) sv);
+	dtl_hv_set(hv,"First",(dtl_dv_t*) dtl_sv_make_i32(1));
+	dtl_hv_set(hv,"Second",(dtl_dv_t*) dtl_sv_make_i32(2));
+	dtl_hv_set(hv,"Third",(dtl_dv_t*) dtl_sv_make_i32(4));
+	dtl_hv_set(hv,"Fourth",(dtl_dv_t*) sv);
 	dtl_ref_inc(sv);
-	CuAssertIntEquals(tc,4,dtl_hv_size(hv));
+	CuAssertIntEquals(tc,4,dtl_hv_length(hv));
 	CuAssertIntEquals(tc,2,dtl_ref_cnt(sv));
 
-	dtl_dv_t *first = dtl_hv_get(hv,"First",0);
-	dtl_dv_t *second = dtl_hv_get(hv,"Second",0);
-	dtl_dv_t *third = dtl_hv_get(hv,"Third",0);
-	dtl_dv_t *fourth = dtl_hv_get(hv,"Fourth",0);
+	dtl_dv_t *first = dtl_hv_get(hv,"First");
+	dtl_dv_t *second = dtl_hv_get(hv,"Second");
+	dtl_dv_t *third = dtl_hv_get(hv,"Third");
+	dtl_dv_t *fourth = dtl_hv_get(hv,"Fourth");
 	CuAssertPtrNotNull(tc,first);
 	CuAssertPtrNotNull(tc,second);
 	CuAssertPtrNotNull(tc,third);
