@@ -37,13 +37,13 @@ void	dtl_hv_iter_init(dtl_hv_t *self);
  * \param[out] pKeyLen pointer to integer containing length of key string
  * \return pointer to scalar value
  */
-dtl_dv_t*	dtl_hv_iter_next(dtl_hv_t *self,const char **ppKey,uint32_t *pKeyLen);
+dtl_dv_t*	dtl_hv_iter_next(dtl_hv_t *self,const char **ppKey);
 
 
 
 //Utility functions
 uint32_t 	dtl_hv_length(const dtl_hv_t *self);
-bool		dtl_hv_exists(const dtl_hv_t *self, const char *pKey, uint32_t u32KeyLen);
+bool		dtl_hv_exists(const dtl_hv_t *self, const char *pKey);
 uint32_t	dtl_hv_keys(dtl_hv_t *self,dtl_av_t *pArray);
 
 

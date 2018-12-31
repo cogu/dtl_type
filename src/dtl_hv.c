@@ -96,12 +96,11 @@ void dtl_hv_iter_init(dtl_hv_t *self){
 /**
  * \param[in] self hash
  * \param[out] pKey pointer to key string
- * \param[out] pKeyLen pointer to integer containing length of key string
  * \return pointer to scalar value
  */
-dtl_dv_t* dtl_hv_iter_next(dtl_hv_t *self,const char **ppKey,uint32_t *pKeyLen){
+dtl_dv_t* dtl_hv_iter_next(dtl_hv_t *self,const char **ppKey){
 	if(self){
-		return (dtl_dv_t*) adt_hash_iter_next(self->pAny,ppKey,pKeyLen);
+		return (dtl_dv_t*) adt_hash_iter_next(self->pAny, ppKey);
 	}
 	return (dtl_dv_t*) 0;
 }
@@ -116,8 +115,7 @@ uint32_t dtl_hv_length(const dtl_hv_t *self){
 	return (uint32_t) 0;
 }
 
-bool dtl_hv_exists(const dtl_hv_t *self, const char *pKey, uint32_t u32KeyLen){
-   (void) u32KeyLen;
+bool dtl_hv_exists(const dtl_hv_t *self, const char *pKey){
 	if(self){
 		return adt_hash_exists(self->pAny,pKey);
 	}
