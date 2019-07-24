@@ -12,7 +12,9 @@
 #include "dtl_av.h"
 #include "dtl_hv.h"
 #include <malloc.h>
+#ifdef MEM_LEAK_CHECK
 #include "CMemLeak.h"
+#endif
 
 
 /**************** Private Function Declarations *******************/
