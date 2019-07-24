@@ -44,7 +44,7 @@ dtl_dv_t*	dtl_hv_iter_next(dtl_hv_t *self,const char **ppKey);
 //Utility functions
 uint32_t 	dtl_hv_length(const dtl_hv_t *self);
 bool		dtl_hv_exists(const dtl_hv_t *self, const char *pKey);
-uint32_t	dtl_hv_keys(dtl_hv_t *self,dtl_av_t *pArray);
+int32_t	dtl_hv_keys(const dtl_hv_t *self, adt_ary_t *pArray);
 
 
 #endif //DTL_HV__

@@ -11,7 +11,10 @@
 #include <assert.h>
 #include "dtl_hv.h"
 #include "dtl_sv.h"
+#ifdef MEM_LEAK_CHECK
 #include "CMemLeak.h"
+#endif
+
 
 
 /**************** Private Function Declarations *******************/
@@ -122,13 +125,12 @@ bool dtl_hv_exists(const dtl_hv_t *self, const char *pKey){
 	return false;
 }
 
-uint32_t dtl_hv_keys(dtl_hv_t *self,dtl_av_t *pArray){
+int32_t dtl_hv_keys(const dtl_hv_t *self, adt_ary_t *pArray){
 	if(self && pArray){
-		return adt_hash_keys(self->pAny,pArray->pAny);
+		return adt_hash_keys(self->pAny, pArray);
 	}
 	return 0;
 }
-
 
 /***************** Private Function Definitions *******************/
 

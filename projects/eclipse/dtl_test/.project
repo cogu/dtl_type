@@ -52,12 +52,12 @@
 		<link>
 			<name>adt/inc</name>
 			<type>2</type>
-			<locationURI>PARENT-3-PROJECT_LOC/adt/inc</locationURI>
+			<locationURI>PARENT-4-PROJECT_LOC/adt/inc</locationURI>
 		</link>
 		<link>
-			<name>adt/inc/src</name>
+			<name>adt/src</name>
 			<type>2</type>
-			<locationURI>PARENT-3-PROJECT_LOC/adt/src</locationURI>
+			<locationURI>PARENT-4-PROJECT_LOC/adt/src</locationURI>
 		</link>
 	</linkedResources>
 </projectDescription>

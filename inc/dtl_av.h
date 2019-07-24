@@ -32,6 +32,7 @@ void		dtl_av_push(dtl_av_t *self, dtl_dv_t *pValue);
 dtl_dv_t*	dtl_av_pop(dtl_av_t *self);
 dtl_dv_t*	dtl_av_shift(dtl_av_t *self);
 void		dtl_av_unshift(dtl_av_t *self, dtl_dv_t *pValue);
+dtl_dv_t*  dtl_av_value(const dtl_av_t *self, int32_t s32Index);
 
 
 //Utility functions

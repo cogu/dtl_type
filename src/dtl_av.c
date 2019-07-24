@@ -11,7 +11,10 @@
 #include "dtl_sv.h"
 #include <malloc.h>
 #include <assert.h>
+#ifdef MEM_LEAK_CHECK
 #include "CMemLeak.h"
+#endif
+
 
 /**************** Private Function Declarations *******************/
 
@@ -90,6 +93,14 @@ dtl_dv_t**	dtl_av_get(const dtl_av_t *self, int32_t s32Index){
 	}
 	return (dtl_dv_t**) 0;
 }
+
+dtl_dv_t*  dtl_av_value(const dtl_av_t *self, int32_t s32Index){
+   if(self){
+      return (dtl_dv_t*) adt_ary_value(self->pAny,s32Index);
+   }
+   return (dtl_dv_t*) 0;
+}
+
 
 void dtl_av_push(dtl_av_t *self, dtl_dv_t *pValue){
 	if(self){
