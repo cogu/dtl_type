@@ -38,7 +38,7 @@ void test_dtl_hv_get_set(CuTest* tc){
 	CuAssertPtrNotNull(tc,third);
 	CuAssertPtrEquals(tc,sv,fourth);
 	dtl_ref_dec(hv);
-	CuAssertIntEquals(tc,82,dtl_sv_get_i32((dtl_sv_t*)fourth));
+	CuAssertIntEquals(tc, 82, dtl_sv_to_i32((dtl_sv_t*)fourth, NULL));
 	CuAssertIntEquals(tc,1,dtl_ref_cnt(sv));
 	dtl_ref_dec(sv);
 }

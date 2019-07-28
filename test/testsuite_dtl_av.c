@@ -34,16 +34,18 @@ void test_dtl_av_push_pop(CuTest* tc){
 
 void test_dtl_av_get_set(CuTest* tc){
 	dtl_av_t *av = dtl_av_new();
+
 	CuAssertPtrNotNull(tc, av);
 
 	dtl_sv_t *sv = dtl_sv_make_i32(1);
-	dtl_av_set(av,3,(dtl_dv_t*) sv);
+	dtl_av_set(av, 3, (dtl_dv_t*) sv);
 	CuAssertPtrEquals(tc,&g_dtl_sv_undef,*dtl_av_get(av,0));
 	CuAssertPtrEquals(tc,&g_dtl_sv_undef,*dtl_av_get(av,1));
 	CuAssertPtrEquals(tc,&g_dtl_sv_undef,*dtl_av_get(av,2));
-	dtl_dv_t *dv = *dtl_av_get(av,3);
-	CuAssertPtrEquals(tc,dv,sv);
-	CuAssertIntEquals(tc,1,dtl_sv_get_i32((dtl_sv_t*)dv));
+	dtl_dv_t *dv = *dtl_av_get(av, 3);
+	CuAssertPtrEquals(tc, dv, sv);
+	CuAssertIntEquals(tc, DTL_DV_SCALAR, dtl_dv_type(dv));
+	CuAssertIntEquals(tc, 1, dtl_sv_to_i32( (dtl_sv_t*) dv, NULL));
 
 	dtl_ref_dec(av);
 }
