@@ -37,14 +37,14 @@ typedef enum dtl_dv_type_id{
 dtl_dv_t *dtl_dv_null();
 void dtl_dv_delete(dtl_dv_t* dv );
 void dtl_dv_vdelete(void *arg);
-void dtl_dv_ref_inc(dtl_dv_t* dv);
-void dtl_dv_ref_dec(dtl_dv_t* dv);
+void dtl_dv_inc_ref(dtl_dv_t* dv);
+void dtl_dv_dec_ref(dtl_dv_t* dv);
 dtl_dv_type_id dtl_dv_type(const dtl_dv_t* dv);
 
-void dtl_dv_ref_dec_void(void* ptr);
+void dtl_dv_dec_ref_void(void* ptr);
 
 #define dtl_ref_cnt(dv) (dv->u32RefCnt)
-#define dtl_ref_inc(dv) dtl_dv_ref_inc((dtl_dv_t*)dv)
-#define dtl_ref_dec(dv) dtl_dv_ref_dec((dtl_dv_t*)dv)
+#define dtl_inc_ref(dv) dtl_dv_inc_ref((dtl_dv_t*)dv)
+#define dtl_dec_ref(dv) dtl_dv_dec_ref((dtl_dv_t*)dv)
 
 #endif //DTL_DV_H__

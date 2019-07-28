@@ -48,7 +48,7 @@ void dtl_hv_delete(dtl_hv_t *self){
 
 void dtl_hv_create(dtl_hv_t *self){
 	if(self){
-		adt_hash_create(self->pAny,dtl_dv_ref_dec_void);
+		adt_hash_create(self->pAny,dtl_dv_dec_ref_void);
 		self->u32Flags = ((uint32_t)DTL_DV_HASH);
 		self->u32RefCnt = 1;
 	}
@@ -62,13 +62,20 @@ void dtl_hv_destroy(dtl_hv_t *self){
 
 
 //Accessors
-void dtl_hv_set(dtl_hv_t *self, const char *pKey, dtl_dv_t *pValue){
-	if(self){
-		dtl_dv_t *pOld = (dtl_dv_t*) adt_hash_get(self->pAny,pKey);
-		if(pOld && pOld != pValue){
-			dtl_dv_ref_dec(pOld);
+void dtl_hv_set(dtl_hv_t *self, const char *pKey, dtl_dv_t *dv, bool autoIncrementRef)
+{
+	if(self)
+	{
+		dtl_dv_t *current = (dtl_dv_t*) adt_hash_get(self->pAny, pKey);
+		if( (current != 0) && (current != dv) )
+		{
+			dtl_dv_dec_ref(current);
 		}
-		adt_hash_set(self->pAny,pKey,pValue);
+		adt_hash_set(self->pAny,pKey,dv);
+      if (autoIncrementRef)
+      {
+         dtl_dv_inc_ref(dv);
+      }
 	}
 }
 

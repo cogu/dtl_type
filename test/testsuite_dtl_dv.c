@@ -14,7 +14,7 @@ void test_dtl_dv_null(CuTest* tc){
 	CuAssertPtrNotNull(tc,dv);
 	CuAssertIntEquals(tc,DTL_DV_NULL,dv->u32Flags);
 	CuAssertIntEquals(tc,1,dv->u32RefCnt);
-	dtl_ref_dec(dv);
+	dtl_dec_ref(dv);
 }
 
 

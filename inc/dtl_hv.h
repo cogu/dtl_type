@@ -26,7 +26,7 @@ void 	dtl_hv_destroy(dtl_hv_t *self);
 
 
 //Accessors
-void	dtl_hv_set(dtl_hv_t *self, const char *pKey, dtl_dv_t *pValue);
+void dtl_hv_set(dtl_hv_t *self, const char *pKey, dtl_dv_t *dv, bool autoIncrementRef);
 dtl_dv_t*	dtl_hv_get(const dtl_hv_t *self, const char *pKey);
 dtl_dv_t*	dtl_hv_remove(dtl_hv_t *self, const char *pKey);
 void	dtl_hv_iter_init(dtl_hv_t *self);

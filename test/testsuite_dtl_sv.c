@@ -74,15 +74,15 @@ void test_dtl_sv_make(CuTest* tc)
 	sv = dtl_sv_make_i32(0);
 	CuAssertPtrNotNull(tc, sv);
 	CuAssertIntEquals(tc, DTL_SV_I32, dtl_sv_type(sv));
-	dtl_sv_t *sv2 = dtl_sv_make_dv((dtl_dv_t*) sv);
+	dtl_sv_t *sv2 = dtl_sv_make_dv((dtl_dv_t*) sv, true);
 	CuAssertPtrNotNull(tc, sv2);
 	CuAssertIntEquals(tc, DTL_SV_DV, dtl_sv_type(sv2));
 	CuAssertPtrEquals(tc, sv, dtl_sv_to_sv(sv2));
-	CuAssertIntEquals(tc,1,dtl_ref_cnt(sv2));
-	CuAssertIntEquals(tc,2,dtl_ref_cnt(sv));
-	dtl_ref_dec(sv2);
-	CuAssertIntEquals(tc,1,dtl_ref_cnt(sv));
-	dtl_ref_dec(sv);
+	CuAssertIntEquals(tc, 1, dtl_ref_cnt(sv2));
+	CuAssertIntEquals(tc, 2, dtl_ref_cnt(sv));
+	dtl_dec_ref(sv2);
+	CuAssertIntEquals(tc, 1, dtl_ref_cnt(sv));
+	dtl_dec_ref(sv);
 }
 
 void test_dtl_sv_bool(CuTest* tc){
@@ -93,27 +93,25 @@ void test_dtl_sv_bool(CuTest* tc){
 	dtl_sv_set_bool(sv, false);
 	CuAssertIntEquals(tc, DTL_SV_BOOL, dtl_sv_type(sv));
 	CuAssertIntEquals(tc, false, dtl_sv_to_bool(sv));
-	dtl_ref_dec(sv);
+	dtl_dec_ref(sv);
 
 	sv = dtl_sv_new();
 	CuAssertPtrNotNull(tc, sv);
 	dtl_sv_set_bool(sv, true);
 	CuAssertIntEquals(tc, DTL_SV_BOOL, dtl_sv_type(sv));
 	CuAssertIntEquals(tc, true, dtl_sv_to_bool(sv));
-	dtl_ref_dec(sv);
+	dtl_dec_ref(sv);
 
 	sv = dtl_sv_make_bool(true);
 	CuAssertIntEquals(tc, DTL_SV_BOOL, dtl_sv_type(sv));
 	CuAssertIntEquals(tc, true, dtl_sv_to_bool(sv));
-	dtl_ref_dec(sv);
+	dtl_dec_ref(sv);
 
 
 	sv = dtl_sv_make_bool(false);
 	CuAssertIntEquals(tc, DTL_SV_BOOL, dtl_sv_type(sv));
 	CuAssertIntEquals(tc, false, dtl_sv_to_bool(sv));
-	dtl_ref_dec(sv);
-
-
+	dtl_dec_ref(sv);
 
 }
 

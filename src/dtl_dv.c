@@ -59,10 +59,10 @@ void dtl_dv_vdelete(void *arg){
    dtl_dv_delete((dtl_dv_t*) arg);
 }
 
-void dtl_dv_ref_inc(dtl_dv_t* dv){
+void dtl_dv_inc_ref(dtl_dv_t* dv){
 	if(dv) dv->u32RefCnt++;
 }
-void dtl_dv_ref_dec(dtl_dv_t* dv){
+void dtl_dv_dec_ref(dtl_dv_t* dv){
 	if( (dv) && (dv != (dtl_dv_t*)&g_dtl_sv_undef) && (dv->u32RefCnt>0) )
 	{
 		if(--dv->u32RefCnt == 0) dtl_dv_delete(dv);
@@ -75,8 +75,8 @@ dtl_dv_type_id dtl_dv_type(const dtl_dv_t* dv){
 	return (dtl_dv_type_id) u8Type;
 }
 
-void dtl_dv_ref_dec_void(void* ptr){
-	dtl_dv_ref_dec( (dtl_dv_t*) ptr);
+void dtl_dv_dec_ref_void(void* ptr){
+	dtl_dv_dec_ref( (dtl_dv_t*) ptr);
 }
 
 /***************** Private Function Definitions *******************/
