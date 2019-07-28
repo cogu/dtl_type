@@ -9,8 +9,9 @@
 
 #include <setjmp.h>
 #include <stdarg.h>
+#include <stdbool.h> //cogu 2019-07-28: added this header
 
-#define CUTEST_VERSION  "CuTest 1.5"
+#define CUTEST_VERSION  "CuTest 1.6" //cogu 2019-07-28: Changed version to 1.6
 
 /* CuString */
 
@@ -79,6 +80,10 @@ void CuAssertDblEquals_LineMsg(CuTest* tc,
 void CuAssertPtrEquals_LineMsg(CuTest* tc, 
 	const char* file, int line, const char* message, 
 	void* expected, void* actual);
+void CuAssertBoolEquals_LineMsg(CuTest* tc,
+   const char* file, int line, const char* message,
+   bool expected, bool actual);
+
 
 /* public assert functions */
 
@@ -96,6 +101,8 @@ void CuAssertPtrEquals_LineMsg(CuTest* tc,
 #define CuAssertDblEquals_Msg(tc,ms,ex,ac,dl) CuAssertDblEquals_LineMsg((tc),__FILE__,__LINE__,(ms),(ex),(ac),(dl))
 #define CuAssertPtrEquals(tc,ex,ac)           CuAssertPtrEquals_LineMsg((tc),__FILE__,__LINE__,NULL,(ex),(ac))
 #define CuAssertPtrEquals_Msg(tc,ms,ex,ac)    CuAssertPtrEquals_LineMsg((tc),__FILE__,__LINE__,(ms),(ex),(ac))
+#define CuAssertBoolEquals(tc,ex,ac)          CuAssertBoolEquals_LineMsg((tc),__FILE__,__LINE__,NULL,(ex),(ac))
+#define CuAssertBoolEquals_Msg(tc,ms,ex,ac)   CuAssertBoolEquals_LineMsg((tc),__FILE__,__LINE__,(ms),(ex),(ac))
 
 #define CuAssertPtrNotNull(tc,p)        CuAssert_Line((tc),__FILE__,__LINE__,"null pointer unexpected",(p != NULL))
 #define CuAssertPtrNotNullMsg(tc,msg,p) CuAssert_Line((tc),__FILE__,__LINE__,(msg),(p != NULL))

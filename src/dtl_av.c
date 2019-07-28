@@ -63,7 +63,7 @@ void dtl_av_delete(dtl_av_t *self){
 void dtl_av_create(dtl_av_t *self){
 	if(self){
 		adt_ary_create(self->pAny, dtl_dv_dec_ref_void);
-		adt_ary_set_fill_elem(self->pAny,(void*) &g_dtl_sv_undef);
+		adt_ary_set_fill_elem(self->pAny,(void*) &g_dtl_sv_none);
 		self->u32Flags = ((uint32_t)DTL_DV_ARRAY);
 		self->u32RefCnt = 1;
 	}
@@ -159,6 +159,20 @@ bool dtl_av_exists(const dtl_av_t *self, int32_t s32Index){
 		return adt_ary_exists(self->pAny,s32Index);
 	}
 	return false;
+}
+
+dtl_error_t dtl_av_sort(dtl_av_t *self, dtl_key_func_t *key, bool reverse)
+{
+   if (self != 0)
+   {
+      if (key != 0)
+      {
+         return DTL_NOT_IMPLEMENTED_ERROR;
+      }
+
+      return DTL_NO_ERROR;
+   }
+   return DTL_INVALID_ARGUMENT_ERROR;
 }
 
 /***************** Private Function Definitions *******************/

@@ -63,7 +63,7 @@ void dtl_dv_inc_ref(dtl_dv_t* dv){
 	if(dv) dv->u32RefCnt++;
 }
 void dtl_dv_dec_ref(dtl_dv_t* dv){
-	if( (dv) && (dv != (dtl_dv_t*)&g_dtl_sv_undef) && (dv->u32RefCnt>0) )
+	if( (dv) && (dv != (dtl_dv_t*)&g_dtl_sv_none) && (dv->u32RefCnt>0) )
 	{
 		if(--dv->u32RefCnt == 0) dtl_dv_delete(dv);
 	}

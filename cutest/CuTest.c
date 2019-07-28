@@ -245,6 +245,18 @@ void CuAssertPtrEquals_LineMsg(CuTest* tc, const char* file, int line, const cha
 	CuFail_Line(tc, file, line, message, buf);
 }
 
+void CuAssertBoolEquals_LineMsg(CuTest* tc, const char* file, int line, const char* message,
+   bool expected, bool actual)
+{
+   char buf[STRING_MAX];
+   const char *expected_str = expected? "true" : "false";
+   const char *actual_str = actual? "true" : "false";
+   if (expected == actual) return;
+   sprintf(buf, "expected <%s> but was <%s>", expected_str, actual_str);
+   CuFail_Line(tc, file, line, message, buf);
+}
+
+
 
 /*-------------------------------------------------------------------------*
  * CuSuite
