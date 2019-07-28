@@ -29,10 +29,10 @@
 //////////////////////////////////////////////////////////////////////////////
 // INCLUDES
 //////////////////////////////////////////////////////////////////////////////
+#include <stdbool.h>
 #include "dtl_dv.h"
 #include "adt_str.h"
-#include <stdbool.h>
-
+#include "dtl_error.h"
 
 //////////////////////////////////////////////////////////////////////////////
 // PUBLIC CONSTANTS AND DATA TYPES
@@ -64,7 +64,7 @@ typedef struct dtl_sv_tag{
 }dtl_sv_t;
 
 typedef enum dtl_sv_type_tag{
-   DTL_SV_UNDEF = 0,
+   DTL_SV_NONE = 0,
    DTL_SV_I32,
    DTL_SV_U32,
    DTL_SV_I64,
@@ -80,7 +80,7 @@ typedef enum dtl_sv_type_tag{
 //////////////////////////////////////////////////////////////////////////////
 // PUBLIC VARIABLES
 //////////////////////////////////////////////////////////////////////////////
-extern dtl_sv_t g_dtl_sv_undef;
+extern dtl_sv_t g_dtl_sv_none;
 //////////////////////////////////////////////////////////////////////////////
 // PUBLIC FUNCTION PROTOTYPES
 //////////////////////////////////////////////////////////////////////////////
@@ -139,8 +139,11 @@ dtl_sv_t *dtl_sv_to_sv(const dtl_sv_t *self);
 struct dtl_av_tag *dtl_sv_to_av(const dtl_sv_t *self);
 struct dtl_hv_tag *dtl_sv_to_hv(const dtl_sv_t *self);
 
+//Comparison functions
+dtl_error_t dtl_sv_lt(const dtl_sv_t *self, const dtl_sv_t *other, bool *result);
+
 //Macros
-#define dtl_sv_undef() &g_dtl_sv_undef
+#define dtl_sv_none() &g_dtl_sv_none
 
 #endif //DTL_SV_H__
 

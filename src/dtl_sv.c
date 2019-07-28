@@ -53,8 +53,8 @@ static void dtl_sv_ztrim(char *str);
 //////////////////////////////////////////////////////////////////////////////
 // PUBLIC VARIABLES
 //////////////////////////////////////////////////////////////////////////////
-static dtl_svx_t g_dtl_svx_undef = {0};
-dtl_sv_t g_dtl_sv_undef = {&g_dtl_svx_undef,1,((uint32_t)DTL_DV_SCALAR)};
+static dtl_svx_t g_dtl_svx_none = {0};
+dtl_sv_t g_dtl_sv_none = {&g_dtl_svx_none, 1, ((uint32_t)DTL_DV_SCALAR)};
 
 //////////////////////////////////////////////////////////////////////////////
 // PRIVATE VARIABLES
@@ -215,7 +215,7 @@ dtl_sv_type_id dtl_sv_type(const dtl_sv_t* self){
       uint8_t u8Type = (uint8_t) ((self->u32Flags & DTL_SV_TYPE_MASK)>>DTL_SV_TYPE_SHIFT);
       return (dtl_sv_type_id) u8Type;
    }
-   return DTL_SV_UNDEF;
+   return DTL_SV_NONE;
 }
 
 dtl_dv_type_id dtl_sv_dv_type(const dtl_sv_t* self){
@@ -350,7 +350,7 @@ int32_t dtl_sv_to_i32(const dtl_sv_t *self, bool *ok)
    if(self != 0)
    {
       switch(dtl_sv_type(self)){
-      case DTL_SV_UNDEF:
+      case DTL_SV_NONE:
          break;
       case DTL_SV_I32:
          retval = self->pAny->i32;
@@ -402,7 +402,7 @@ uint32_t dtl_sv_to_u32(const dtl_sv_t *self, bool *ok)
    if(self)
    {
       switch(dtl_sv_type(self)){
-      case DTL_SV_UNDEF:
+      case DTL_SV_NONE:
          break;
       case DTL_SV_I32:
          retval = (uint32_t) self->pAny->i32;
@@ -455,7 +455,7 @@ int64_t dtl_sv_to_i64(const dtl_sv_t *self, bool *ok)
    if(self != 0)
    {
       switch(dtl_sv_type(self)){
-      case DTL_SV_UNDEF:
+      case DTL_SV_NONE:
          break;
       case DTL_SV_I32:
          retval = (int64_t) self->pAny->i32;
@@ -508,7 +508,7 @@ uint64_t dtl_sv_to_u64(const dtl_sv_t *self, bool *ok)
    if(self != 0)
    {
       switch(dtl_sv_type(self)){
-      case DTL_SV_UNDEF:
+      case DTL_SV_NONE:
          break;
       case DTL_SV_I32:
          retval = (uint64_t) self->pAny->i32;
@@ -563,7 +563,7 @@ float dtl_sv_to_flt(const dtl_sv_t *self, bool *ok)
    {
       switch(dtl_sv_type(self))
       {
-      case DTL_SV_UNDEF:
+      case DTL_SV_NONE:
          break;
       case DTL_SV_I32:
          retval = (float) self->pAny->i32;
@@ -617,7 +617,7 @@ double dtl_sv_to_dbl(const dtl_sv_t *self, bool *ok)
    {
       switch(dtl_sv_type(self))
       {
-      case DTL_SV_UNDEF:
+      case DTL_SV_NONE:
          break;
       case DTL_SV_I32:
          retval = (double) self->pAny->i32;
@@ -665,7 +665,7 @@ double dtl_sv_to_dbl(const dtl_sv_t *self, bool *ok)
 bool dtl_sv_to_bool(const dtl_sv_t *self){
    if(self){
       switch(dtl_sv_type(self)){
-      case DTL_SV_UNDEF:
+      case DTL_SV_NONE:
          break;
       case DTL_SV_I32:
          return (bool) self->pAny->i32;
@@ -696,7 +696,7 @@ bool dtl_sv_to_bool(const dtl_sv_t *self){
 void* dtl_sv_to_ptr(const dtl_sv_t *self){
    if(self){
       switch(dtl_sv_type(self)){
-      case DTL_SV_UNDEF:
+      case DTL_SV_NONE:
          break;
       case DTL_SV_I32:
          return (void*) ((long) self->pAny->i32);
@@ -729,7 +729,7 @@ void* dtl_sv_to_ptr(const dtl_sv_t *self){
 const char* dtl_sv_to_cstr(dtl_sv_t *self){
    if(self){
       switch(dtl_sv_type(self)){
-      case DTL_SV_UNDEF:
+      case DTL_SV_NONE:
          break;
       case DTL_SV_I32:
          break;
@@ -767,7 +767,7 @@ adt_str_t* dtl_sv_to_string(const dtl_sv_t *self)
          char numBuf[MAX_NUM_BUF];
          bool isNum = false;
          switch(dtl_sv_type(self)){
-         case DTL_SV_UNDEF:
+         case DTL_SV_NONE:
             adt_str_append_cstr(str,"(undefined)");
             break;
          case DTL_SV_I32:
@@ -884,6 +884,98 @@ struct dtl_hv_tag *dtl_sv_to_hv(const dtl_sv_t *self)
       }
    }
    return (dtl_hv_t*) 0;
+}
+
+//Comparison functions
+
+/*
+ * Compares if self is less than other.
+ * If function returns DTL_NO_ERROR the result (of the compariosn) is placed in the result argument.
+ */
+dtl_error_t dtl_sv_lt(const dtl_sv_t *self, const dtl_sv_t *other, bool *result)
+{
+   if ( (self != 0) && (other != 0) && (result != 0) )
+   {
+      dtl_error_t retval = DTL_TYPE_ERROR;
+      dtl_sv_type_id leftType, rightType;
+      *result = false;
+      leftType = dtl_sv_type(self);
+      rightType = dtl_sv_type(other);
+      switch(leftType)
+      {
+      case DTL_SV_NONE:
+         retval = DTL_TYPE_ERROR; //cannot compare if None is less than None
+         break;
+      case DTL_SV_I32:
+         if (rightType == DTL_SV_I32)
+         {
+            *result = self->pAny->i32 < other->pAny->i32;
+            retval = DTL_NO_ERROR;
+         }
+         break;
+      case DTL_SV_U32:
+         if (rightType == DTL_SV_U32)
+         {
+            *result = self->pAny->u32 < other->pAny->u32;
+            retval = DTL_NO_ERROR;
+         }
+         break;
+      case DTL_SV_I64:
+         if (rightType == DTL_SV_I64)
+         {
+            *result = self->pAny->i64 < other->pAny->i64;
+            retval = DTL_NO_ERROR;
+         }
+         break;
+      case DTL_SV_U64:
+         if (rightType == DTL_SV_U64)
+         {
+            *result = self->pAny->u64 < other->pAny->u64;
+            retval = DTL_NO_ERROR;
+         }
+         break;
+      case DTL_SV_FLT:
+         if (rightType == DTL_SV_FLT)
+         {
+            *result = self->pAny->flt < other->pAny->flt;
+            retval = DTL_NO_ERROR;
+         }
+         break;
+      case DTL_SV_DBL:
+         if (rightType == DTL_SV_DBL)
+         {
+            *result = self->pAny->dbl < other->pAny->dbl;
+            retval = DTL_NO_ERROR;
+         }
+         break;
+      case DTL_SV_BOOL:
+         if (rightType == DTL_SV_BOOL)
+         {
+            *result = self->pAny->bl < other->pAny->bl;
+            retval = DTL_NO_ERROR;
+         }
+         break;
+      case DTL_SV_STR:
+         if (rightType == DTL_SV_STR)
+         {
+            int tmp = adt_str_lt(&self->pAny->str, &other->pAny->str);
+            if (tmp >= 0)
+            {
+               *result = (bool) tmp;
+               retval = DTL_NO_ERROR;
+            }
+         }
+         break;
+      case DTL_SV_PTR:
+         break;
+      case DTL_SV_DV:
+         break;
+      default:
+         retval = DTL_TYPE_ERROR;
+      }
+      return retval;
+   }
+   return DTL_INVALID_ARGUMENT_ERROR;
 }
 
 
