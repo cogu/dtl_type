@@ -19,34 +19,28 @@ typedef struct dtl_av_tag{
 
 /***************** Public Function Declarations *******************/
 //Constructor/Destructor
-dtl_av_t*	dtl_av_new();
-dtl_av_t*	dtl_av_make(dtl_dv_t** ppValue, int32_t s32Len);
-void		dtl_av_delete(dtl_av_t *self);
-void		dtl_av_create(dtl_av_t *self);
-void		dtl_av_destroy(dtl_av_t *self);
+dtl_av_t* dtl_av_new();
+dtl_av_t* dtl_av_make(dtl_dv_t** ppValue, int32_t s32Len);
+void dtl_av_delete(dtl_av_t *self);
+void dtl_av_create(dtl_av_t *self);
+void dtl_av_destroy(dtl_av_t *self);
 
 //Accessors
-dtl_dv_t**	dtl_av_set(dtl_av_t *self, int32_t s32Index, dtl_dv_t *pValue);
-dtl_dv_t**	dtl_av_get(const dtl_av_t *self, int32_t s32Index);
-void		dtl_av_push(dtl_av_t *self, dtl_dv_t *pValue);
-dtl_dv_t*	dtl_av_pop(dtl_av_t *self);
-dtl_dv_t*	dtl_av_shift(dtl_av_t *self);
-void		dtl_av_unshift(dtl_av_t *self, dtl_dv_t *pValue);
-dtl_dv_t*  dtl_av_value(const dtl_av_t *self, int32_t s32Index);
+dtl_dv_t** dtl_av_set(dtl_av_t *self, int32_t s32Index, dtl_dv_t *pValue);
+dtl_dv_t** dtl_av_get(const dtl_av_t *self, int32_t s32Index);
+void dtl_av_push(dtl_av_t *self, dtl_dv_t *dv, bool autoIncrementRef);
+dtl_dv_t* dtl_av_pop(dtl_av_t *self);
+dtl_dv_t* dtl_av_shift(dtl_av_t *self);
+void dtl_av_unshift(dtl_av_t *self, dtl_dv_t *pValue);
+dtl_dv_t* dtl_av_value(const dtl_av_t *self, int32_t s32Index);
 
 
 //Utility functions
-void	dtl_av_extend(dtl_av_t *self, int32_t s32Len);
-void	dtl_av_fill(dtl_av_t *self, int32_t s32Len);
-void	dtl_av_clear(dtl_av_t *self);
+void dtl_av_extend(dtl_av_t *self, int32_t s32Len);
+void dtl_av_fill(dtl_av_t *self, int32_t s32Len);
+void dtl_av_clear(dtl_av_t *self);
 int32_t dtl_av_length(const dtl_av_t *self);
-bool	dtl_av_exists(const dtl_av_t *self, int32_t s32Index);
+bool dtl_av_exists(const dtl_av_t *self, int32_t s32Index);
 
-/*
-void dt_av_pushn(context_t *pContext, array_t *pArray, scalar_t **pScalars, uint32_t u32n);			//Pushes u32n SVs to the end of the array
-int32_t dtl_av_popn(context_t *pContext, array_t *pArray, scalar_t **pScalars, uint32_t u32n);		//Pops (up to) u32n SVs from the end of the array
-int32_t dtl_av_shiftn(context_t *pContext, array_t *pArray, scalar_t **pScalars, uint32_t u32n);		//Shifts (up to) u32n SVs from the start of the array
-void dtl_av_unshiftn(context_t *pContext, array_t *pArray, scalar_t **pScalars, uint32_t u32n);		//Unshifts u32n SVs to the start of the array
-*/
 
 #endif //DTL_AV_H__

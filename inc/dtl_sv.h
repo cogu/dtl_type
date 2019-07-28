@@ -101,8 +101,9 @@ dtl_sv_t *dtl_sv_make_flt(float sf);
 dtl_sv_t *dtl_sv_make_dbl(double df);
 dtl_sv_t *dtl_sv_make_bool(bool bl);
 dtl_sv_t *dtl_sv_make_ptr(void *ptr,void (*pDestructor)(void*));
-dtl_sv_t *dtl_sv_make_cstr(const char* str);
-dtl_sv_t *dtl_sv_make_dv(dtl_dv_t *dv);
+dtl_sv_t *dtl_sv_make_str(const adt_str_t *str);
+dtl_sv_t *dtl_sv_make_cstr(const char* cstr);
+dtl_sv_t *dtl_sv_make_dv(dtl_dv_t *dv, bool autoIncRef);
 
 //getters
 dtl_sv_type_id dtl_sv_type(const dtl_sv_t* self);
@@ -120,7 +121,7 @@ void dtl_sv_set_ptr(dtl_sv_t *self, void *p, void (*pDestructor)(void*));
 void dtl_sv_set_str(dtl_sv_t *self, const adt_str_t *str);
 void dtl_sv_set_cstr(dtl_sv_t *self, const char* str);
 void dtl_sv_set_bstr(dtl_sv_t *self, const uint8_t *pBegin, const uint8_t *pEnd);
-void dtl_sv_set_dv(dtl_sv_t *self, dtl_dv_t *dv);
+void dtl_sv_set_dv(dtl_sv_t *self, dtl_dv_t *dv, bool autoIncRef);
 
 //Conversion functions
 int32_t dtl_sv_to_i32(const dtl_sv_t *self, bool *ok);

@@ -108,7 +108,7 @@ void dtl_sv_destroy(dtl_sv_t* self){
          break;
       case DTL_SV_DV:
          if(self->pAny->dv){
-            dtl_dv_ref_dec(self->pAny->dv);
+            dtl_dv_dec_ref(self->pAny->dv);
          }
          break;
       default:
@@ -183,18 +183,29 @@ dtl_sv_t *dtl_sv_make_ptr(void *ptr,void (*pDestructor)(void*)){
    return self;
 }
 
-dtl_sv_t *dtl_sv_make_cstr(const char* str){
+dtl_sv_t *dtl_sv_make_str(const adt_str_t *str)
+{
    dtl_sv_t *self = dtl_sv_new();
    if(self){
-      dtl_sv_set_cstr(self,str);
+      dtl_sv_set_str(self, str);
    }
    return self;
 }
 
-dtl_sv_t *dtl_sv_make_dv(dtl_dv_t *dv){
+dtl_sv_t *dtl_sv_make_cstr(const char* cstr){
    dtl_sv_t *self = dtl_sv_new();
    if(self){
-      dtl_sv_set_dv(self,dv);
+      dtl_sv_set_cstr(self, cstr);
+   }
+   return self;
+}
+
+dtl_sv_t *dtl_sv_make_dv(dtl_dv_t *dv, bool autoIncRef)
+{
+   dtl_sv_t *self = dtl_sv_new();
+   if(self)
+   {
+      dtl_sv_set_dv(self, dv, autoIncRef);
    }
    return self;
 }
@@ -219,7 +230,7 @@ dtl_dv_type_id dtl_sv_dv_type(const dtl_sv_t* self){
 void dtl_sv_set_i32(dtl_sv_t *self, int32_t i32){
    if(self){
       if(dtl_sv_type(self)==DTL_SV_DV){
-         dtl_dv_ref_dec(self->pAny->dv);
+         dtl_dv_dec_ref(self->pAny->dv);
       }
       dtl_sv_set_type(self,DTL_SV_I32);
       self->pAny->i32 = i32;
@@ -229,7 +240,7 @@ void dtl_sv_set_i32(dtl_sv_t *self, int32_t i32){
 void dtl_sv_set_u32(dtl_sv_t *self, uint32_t u32){
    if(self){
       if(dtl_sv_type(self)==DTL_SV_DV){
-         dtl_dv_ref_dec(self->pAny->dv);
+         dtl_dv_dec_ref(self->pAny->dv);
       }
       dtl_sv_set_type(self,DTL_SV_U32);
       self->pAny->u32 = u32;
@@ -239,7 +250,7 @@ void dtl_sv_set_u32(dtl_sv_t *self, uint32_t u32){
 void dtl_sv_set_i64(dtl_sv_t *self, int64_t i64){
    if(self){
       if(dtl_sv_type(self)==DTL_SV_DV){
-         dtl_dv_ref_dec(self->pAny->dv);
+         dtl_dv_dec_ref(self->pAny->dv);
       }
       dtl_sv_set_type(self,DTL_SV_I64);
       self->pAny->i64 = i64;
@@ -249,7 +260,7 @@ void dtl_sv_set_i64(dtl_sv_t *self, int64_t i64){
 void dtl_sv_set_u64(dtl_sv_t *self, uint64_t u64){
    if(self){
       if(dtl_sv_type(self)==DTL_SV_DV){
-         dtl_dv_ref_dec(self->pAny->dv);
+         dtl_dv_dec_ref(self->pAny->dv);
       }
       dtl_sv_set_type(self,DTL_SV_U64);
       self->pAny->u64 = u64;
@@ -260,7 +271,7 @@ void dtl_sv_set_u64(dtl_sv_t *self, uint64_t u64){
 void dtl_sv_set_flt(dtl_sv_t *self, float flt){
    if(self){
       if(dtl_sv_type(self)==DTL_SV_DV){
-         dtl_dv_ref_dec(self->pAny->dv);
+         dtl_dv_dec_ref(self->pAny->dv);
       }
       dtl_sv_set_type(self,DTL_SV_FLT);
       self->pAny->flt = flt;
@@ -283,7 +294,7 @@ void dtl_sv_set_bool(dtl_sv_t *self, bool bl){
 void dtl_sv_set_ptr(dtl_sv_t *self, void *p, void (*pDestructor)(void*)){
    if(self){
       if(dtl_sv_type(self)==DTL_SV_DV){
-         dtl_dv_ref_dec(self->pAny->dv);
+         dtl_dv_dec_ref(self->pAny->dv);
       }
       dtl_sv_set_type(self,DTL_SV_PTR);
       self->pAny->ptr.p = p;
@@ -317,13 +328,16 @@ void dtl_sv_set_bstr(dtl_sv_t *self, const uint8_t *pBegin, const uint8_t *pEnd)
    }
 }
 
-void dtl_sv_set_dv(dtl_sv_t *self, dtl_dv_t *dv)
+void dtl_sv_set_dv(dtl_sv_t *self, dtl_dv_t *dv, bool autoIncRef)
 {
    if(self != 0)
    {
       dtl_sv_set_type(self,DTL_SV_DV);
       self->pAny->dv = dv;
-      dtl_dv_ref_inc(dv);
+      if (autoIncRef)
+      {
+         dtl_dv_inc_ref(dv);
+      }
    }
 }
 
@@ -881,7 +895,7 @@ static void dtl_sv_set_type(dtl_sv_t *self, dtl_sv_type_id newType)
    dtl_sv_type_id currentType = dtl_sv_type(self);
    if(currentType == DTL_SV_DV)
    {
-      dtl_dv_ref_dec(self->pAny->dv);
+      dtl_dv_dec_ref(self->pAny->dv);
    }
    self->u32Flags &= ~((uint32_t)DTL_SV_TYPE_MASK);
    self->u32Flags |= (((uint32_t)newType)<<DTL_SV_TYPE_SHIFT) & DTL_SV_TYPE_MASK;

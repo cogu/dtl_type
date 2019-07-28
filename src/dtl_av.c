@@ -62,7 +62,7 @@ void dtl_av_delete(dtl_av_t *self){
 
 void dtl_av_create(dtl_av_t *self){
 	if(self){
-		adt_ary_create(self->pAny,dtl_dv_ref_dec_void);
+		adt_ary_create(self->pAny, dtl_dv_dec_ref_void);
 		adt_ary_set_fill_elem(self->pAny,(void*) &g_dtl_sv_undef);
 		self->u32Flags = ((uint32_t)DTL_DV_ARRAY);
 		self->u32RefCnt = 1;
@@ -80,7 +80,7 @@ dtl_dv_t**	dtl_av_set(dtl_av_t *self, int32_t s32Index, dtl_dv_t *pValue){
 	if(self){
 		dtl_dv_t **tmp = (dtl_dv_t**)adt_ary_get(self->pAny,s32Index);
 		if(tmp && *tmp != pValue){
-			dtl_dv_ref_dec(*tmp);
+			dtl_dv_dec_ref(*tmp);
 		}
 		return (dtl_dv_t**) adt_ary_set(self->pAny,s32Index,pValue);
 	}
@@ -101,10 +101,13 @@ dtl_dv_t*  dtl_av_value(const dtl_av_t *self, int32_t s32Index){
    return (dtl_dv_t*) 0;
 }
 
-
-void dtl_av_push(dtl_av_t *self, dtl_dv_t *pValue){
+void dtl_av_push(dtl_av_t *self, dtl_dv_t *dv, bool autoIncrementRef){
 	if(self){
-		adt_ary_push(self->pAny,pValue);
+		adt_ary_push(self->pAny, dv);
+		if (autoIncrementRef)
+		{
+		   dtl_dv_inc_ref(dv);
+		}
 	}
 }
 dtl_dv_t* dtl_av_pop(dtl_av_t *self){
