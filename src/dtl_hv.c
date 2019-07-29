@@ -14,7 +14,7 @@
 #ifdef MEM_LEAK_CHECK
 #include "CMemLeak.h"
 #else
-#define vfree(x) free(x)
+#define vfree free
 #endif
 
 
