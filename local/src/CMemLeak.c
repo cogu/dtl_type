@@ -12,8 +12,11 @@
 
 ********************************************************************************
 */
-
 #include "CMemLeak.h"
+
+/*******************************************************************************
+* Helper functions (added by Conny Gustafsson 2019-01-04)
+*******************************************************************************/
 #undef malloc
 #undef realloc
 #undef free
@@ -79,7 +82,15 @@ struct XWBList
 static struct XWBList xwbMem = 
 {
     (struct XWBNode*) 0,
-    (struct XWBNode*) 0
+    (struct XWBNode*) 0,
+    (FILE*) 0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
 };
 /*******************************************************************************
 * Forward declarations
@@ -114,6 +125,7 @@ static void XWBMemInsert (
     const unsigned int iSize,
     const char* iFile,
     const unsigned int iLine);
+
 /*******************************************************************************
 * New node
 *******************************************************************************/
