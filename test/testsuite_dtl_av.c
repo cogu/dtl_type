@@ -1,23 +1,86 @@
-#include <assert.h>
-#include <setjmp.h>
+/*****************************************************************************
+* \file      testsuite_dtl_av.c
+* \author    Conny Gustafsson
+* \date      2013-08-16
+* \brief     Unit tests for dtl_av
+*
+* Copyright (c) 2013-2019 Conny Gustafsson
+* Permission is hereby granted, free of charge, to any person obtaining a copy of
+* this software and associated documentation files (the "Software"), to deal in
+* the Software without restriction, including without limitation the rights to
+* use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+* the Software, and to permit persons to whom the Software is furnished to do so,
+* subject to the following conditions:
+
+* The above copyright notice and this permission notice shall be included in all
+* copies or substantial portions of the Software.
+
+* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+* IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+* FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+* COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+* IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+* CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+*
+******************************************************************************/
+//////////////////////////////////////////////////////////////////////////////
+// INCLUDES
+//////////////////////////////////////////////////////////////////////////////
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include <time.h>
 #include "CuTest.h"
 #include "dtl_sv.h"
 #include "dtl_av.h"
+#ifdef MEM_LEAK_CHECK
 #include "CMemLeak.h"
+#endif
 
+//////////////////////////////////////////////////////////////////////////////
+// PRIVATE CONSTANTS AND DATA TYPES
+//////////////////////////////////////////////////////////////////////////////
 
-void test_dtl_av_new_delete(CuTest* tc)
+//////////////////////////////////////////////////////////////////////////////
+// PRIVATE FUNCTION PROTOTYPES
+//////////////////////////////////////////////////////////////////////////////
+static void test_dtl_av_new_delete(CuTest* tc);
+static void test_dtl_av_push_pop(CuTest* tc);
+static void test_dtl_av_get_set(CuTest* tc);
+static void test_dtl_av_sort_i32(CuTest* tc);
+static void test_dtl_av_sort_strings(CuTest* tc);
+
+//////////////////////////////////////////////////////////////////////////////
+// PRIVATE VARIABLES
+//////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////
+// PUBLIC FUNCTIONS
+//////////////////////////////////////////////////////////////////////////////
+CuSuite* testsuite_dtl_av(void)
+{
+   CuSuite* suite = CuSuiteNew();
+
+   SUITE_ADD_TEST(suite, test_dtl_av_new_delete);
+   SUITE_ADD_TEST(suite, test_dtl_av_push_pop);
+   SUITE_ADD_TEST(suite, test_dtl_av_get_set);
+   SUITE_ADD_TEST(suite, test_dtl_av_sort_i32);
+   SUITE_ADD_TEST(suite, test_dtl_av_sort_strings);
+
+   return suite;
+}
+//////////////////////////////////////////////////////////////////////////////
+// PRIVATE FUNCTIONS
+//////////////////////////////////////////////////////////////////////////////
+
+static void test_dtl_av_new_delete(CuTest* tc)
 {
 	dtl_av_t *av = dtl_av_new();
 	CuAssertPtrNotNull(tc, av);
 	dtl_av_delete(av);
 }
 
-void test_dtl_av_push_pop(CuTest* tc){
+static void test_dtl_av_push_pop(CuTest* tc)
+{
 	dtl_av_t *av = dtl_av_new();
 	CuAssertPtrNotNull(tc, av);
 	dtl_sv_t *sv = dtl_sv_make_i32(82);
@@ -32,7 +95,8 @@ void test_dtl_av_push_pop(CuTest* tc){
 	dtl_dec_ref(sv);
 }
 
-void test_dtl_av_get_set(CuTest* tc){
+static void test_dtl_av_get_set(CuTest* tc)
+{
 	dtl_av_t *av = dtl_av_new();
 
 	CuAssertPtrNotNull(tc, av);
@@ -51,15 +115,47 @@ void test_dtl_av_get_set(CuTest* tc){
 }
 
 
-
-
-CuSuite* testsuite_dtl_av(void)
+static void test_dtl_av_sort_i32(CuTest* tc)
 {
-	CuSuite* suite = CuSuiteNew();
+   dtl_av_t *av = dtl_av_new();
+   CuAssertPtrNotNull(tc, av);
 
-	SUITE_ADD_TEST(suite, test_dtl_av_new_delete);
-	SUITE_ADD_TEST(suite, test_dtl_av_push_pop);
-	SUITE_ADD_TEST(suite, test_dtl_av_get_set);
-	return suite;
+   dtl_av_push(av, (dtl_dv_t*) dtl_sv_make_i32(9), false);
+   dtl_av_push(av, (dtl_dv_t*) dtl_sv_make_i32(2), false);
+   dtl_av_push(av, (dtl_dv_t*) dtl_sv_make_i32(5), false);
+   dtl_av_push(av, (dtl_dv_t*) dtl_sv_make_i32(10), false);
+   dtl_av_push(av, (dtl_dv_t*) dtl_sv_make_i32(4), false);
+   dtl_av_push(av, (dtl_dv_t*) dtl_sv_make_i32(7), false);
+   CuAssertIntEquals(tc, 6, dtl_av_length(av));
+   CuAssertIntEquals(tc, DTL_NO_ERROR, dtl_av_sort(av, NULL, false));
+   CuAssertIntEquals(tc, 2, dtl_sv_to_i32((dtl_sv_t*) dtl_av_value(av, 0), NULL));
+   CuAssertIntEquals(tc, 4, dtl_sv_to_i32((dtl_sv_t*) dtl_av_value(av, 1), NULL));
+   CuAssertIntEquals(tc, 5, dtl_sv_to_i32((dtl_sv_t*) dtl_av_value(av, 2), NULL));
+   CuAssertIntEquals(tc, 7, dtl_sv_to_i32((dtl_sv_t*) dtl_av_value(av, 3), NULL));
+   CuAssertIntEquals(tc, 9, dtl_sv_to_i32((dtl_sv_t*) dtl_av_value(av, 4), NULL));
+   CuAssertIntEquals(tc, 10, dtl_sv_to_i32((dtl_sv_t*) dtl_av_value(av, 5), NULL));
+
+   dtl_dec_ref(av);
 }
+
+static void test_dtl_av_sort_strings(CuTest* tc)
+{
+   dtl_av_t *av = dtl_av_new();
+   CuAssertPtrNotNull(tc, av);
+
+   dtl_av_push(av, (dtl_dv_t*) dtl_sv_make_cstr("strawberry"), false);
+   dtl_av_push(av, (dtl_dv_t*) dtl_sv_make_cstr("apple"), false);
+   dtl_av_push(av, (dtl_dv_t*) dtl_sv_make_cstr("raspberry"), false);
+   dtl_av_push(av, (dtl_dv_t*) dtl_sv_make_cstr("pear"), false);
+   dtl_av_push(av, (dtl_dv_t*) dtl_sv_make_cstr("pineapple"), false);
+   CuAssertIntEquals(tc, 5, dtl_av_length(av));
+   CuAssertIntEquals(tc, DTL_NO_ERROR, dtl_av_sort(av, NULL, false));
+   CuAssertStrEquals(tc, "apple", dtl_sv_to_cstr((dtl_sv_t*) dtl_av_value(av, 0)));
+   CuAssertStrEquals(tc, "pear", dtl_sv_to_cstr((dtl_sv_t*) dtl_av_value(av, 1)));
+   CuAssertStrEquals(tc, "pineapple", dtl_sv_to_cstr((dtl_sv_t*) dtl_av_value(av, 2)));
+   CuAssertStrEquals(tc, "strawberry", dtl_sv_to_cstr((dtl_sv_t*) dtl_av_value(av, 3)));
+
+   dtl_dec_ref(av);
+}
+
 
