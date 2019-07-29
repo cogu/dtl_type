@@ -9,6 +9,11 @@ CuSuite* testsuite_dtl_sv(void);
 CuSuite* testsuite_dtl_av(void);
 CuSuite* testsuite_dtl_hv(void);
 
+void vfree(void *arg)
+{
+   free(arg);
+}
+
 
 void RunAllTests(void)
 {

@@ -2,7 +2,7 @@
 * \file      testsuite_dtl_av.c
 * \author    Conny Gustafsson
 * \date      2013-08-16
-* \brief     Unit tests for dtl_av
+* \brief     Unit tests for DTL array
 *
 * Copyright (c) 2013-2019 Conny Gustafsson
 * Permission is hereby granted, free of charge, to any person obtaining a copy of
@@ -153,7 +153,8 @@ static void test_dtl_av_sort_strings(CuTest* tc)
    CuAssertStrEquals(tc, "apple", dtl_sv_to_cstr((dtl_sv_t*) dtl_av_value(av, 0)));
    CuAssertStrEquals(tc, "pear", dtl_sv_to_cstr((dtl_sv_t*) dtl_av_value(av, 1)));
    CuAssertStrEquals(tc, "pineapple", dtl_sv_to_cstr((dtl_sv_t*) dtl_av_value(av, 2)));
-   CuAssertStrEquals(tc, "strawberry", dtl_sv_to_cstr((dtl_sv_t*) dtl_av_value(av, 3)));
+   CuAssertStrEquals(tc, "raspberry", dtl_sv_to_cstr((dtl_sv_t*) dtl_av_value(av, 3)));
+   CuAssertStrEquals(tc, "strawberry", dtl_sv_to_cstr((dtl_sv_t*) dtl_av_value(av, 4)));
 
    dtl_dec_ref(av);
 }
