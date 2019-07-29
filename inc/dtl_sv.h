@@ -45,7 +45,8 @@ typedef struct dtl_pv_tag{
    void (*pDestructor)(void*);
 }dtl_pv_t;
 
-typedef union sv_tag{
+
+typedef union dtl_sv_value_tag{
     int32_t    i32;
     uint32_t   u32;
     int64_t    i64;
@@ -55,7 +56,13 @@ typedef union sv_tag{
     adt_str_t  str;
     dtl_pv_t   ptr;
     dtl_dv_t*  dv;
-    bool    bl;
+    bool       bl;
+} dtl_sv_value_t;
+
+typedef struct dtl_svx_tag
+{
+   adt_str_t *tmpStr; //used as temporary storage area when user calls dtl_sv_to_cstr
+   dtl_sv_value_t val;
 } dtl_svx_t;
 
 
