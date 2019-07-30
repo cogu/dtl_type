@@ -1,14 +1,69 @@
-dtl_type
-========
+# dtl_type library
 
-Perl-inspired data structures for the C programming language.
+A Dynamically Typed Language (or DTL) is a generic term for a modern scripting language (such as Python, Perl or Javascript).
+Such languages usually contains many parts:
 
-* scalar value (sv)
-* array value (av)
-* hash value (hv)
+* Language syntax
+* Compiler
+* Runtime Interpreter (or Virtual Machine)
+  * Type system
+* Language Libraries
 
-Usage
-=====
+In dtl_type I have implemnted only the type system without any of the other language components. It is inspired by the Perl type system and uses similar terminology.
+
+Using this library you can easily build arbitrarily complex data structures in runtime using the C programming language.
+All values are reference counted which significantly simplifies memory management. The initial reference count of newly created values is 1.
+
+In some programming languages (or libraries) you might have something called "Variant". This is a similar idea to what this library is trying to achieve.
+
+## Dynamic Value (DV)
+
+This is the base class which all other value types inherits from. (This is sort of a pseudo-statement since C have neither classes or inheritance).
+
+A dynamic value can be any of the following types:
+
+* Scalar Value (SV)
+* Array Value (AV)
+* Hash Value (HV)
+
+## Scalar Values (SV)
+
+A scalar contains a single unit of data.
+
+Example of scalar types:
+
+* Integer
+* Double
+* String
+* Boolean
+* NoneType (this name is actually borrowed from Python)
+
+## Array Values (AV)
+
+Array values are managed arrays containing dynamic values (DVs).
+
+Examples:
+
+* Array of scalar values
+* Array of array values
+* Array of hash values
+* Array of mixed values (any of the above)
+
+
+## Hash Values (HV)
+
+Hash values are key-value lookup tables where the key is a string and the value is any dynamic value (DV).
+
+# Dependencies
+
+* [cogu/adt](https://github.com/cogu/adt)
+
+This repo depends on some of my other repos. The unit test project(s) assumes that repos are cloned (separately) into a common directory.
+
+* adt
+* dtl_type (this repo)
+
+# Usage
 
 ``` C
 #include <stdio.h>
@@ -75,24 +130,7 @@ int main(int argc, char **argv)
 }
 ```
 
-Building
-========
-dtl_type should work with a reasonably new C compiler (use gcc with default settings). It has been tested and run on cygwin and Linux.
 
-* Compile the c source files from the [adt](https://github.com/cogu/adt)/modules/adt/src directory
-* Compile the c source files from the modules/dtl_type/src directory
-
-Testing
-=======
-Unit tests have been implemented using the [CuTest](http://cutest.sourceforge.net/) framework.
-To build the unit tests, define the symbol UNIT_TEST and rebuild all sources including the ones in the test and util directories.
-The [CuTest](http://cutest.sourceforge.net/) sources are found in the test directory. It has been slightly modified to fix a memory leak.
-
-Memory leaks are detected using [CMemLeak](http://www.codeguru.com/cpp/misc/misc/memory/article.php/c3745/Detecting-Memory-Leaks-in-C.htm) (cygwin+Linux) 
-and valgrind (Linux only).
-To enable memory leak detection with CMemLeak, define the symbol _DEBUG and add "CMemLeak.h" as your last include in each 
-of your C source file. After rebuilding and running your program a text file named
-CMemLeak.txt is automatically generated in the current working directory.
 
 
 
