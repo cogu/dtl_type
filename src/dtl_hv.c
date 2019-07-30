@@ -27,12 +27,15 @@
 
 /****************** Public Function Definitions *******************/
 //Constructor/Destructor
-dtl_hv_t* dtl_hv_new(void){
+dtl_hv_t* dtl_hv_new(void)
+{
 	dtl_hv_t *self;
-	if((self = (dtl_hv_t*)malloc(sizeof(dtl_hv_t)))==(dtl_hv_t*)0){
-		return (dtl_hv_t*)0;
+	if( (self = (dtl_hv_t*) malloc(sizeof(dtl_hv_t))) == (dtl_hv_t*) 0 )
+	{
+		return (dtl_hv_t*) 0;
 	}
-	if((self->pAny = (adt_hash_t*)malloc(sizeof(adt_hash_t)))==(adt_hash_t*)0){
+	if( (self->pAny = (adt_hash_t*) malloc(sizeof(adt_hash_t))) == (adt_hash_t*) 0 )
+	{
 		free(self);
 		return (dtl_hv_t*)0;
 	}
@@ -40,31 +43,37 @@ dtl_hv_t* dtl_hv_new(void){
 	return self;
 }
 
-void dtl_hv_delete(dtl_hv_t *self){
-	if(self){
+void dtl_hv_delete(dtl_hv_t *self)
+{
+	if(self)
+	{
 		dtl_hv_destroy(self);
 		free(self->pAny);
 		free(self);
 	}
 }
 
-void dtl_hv_create(dtl_hv_t *self){
-	if(self){
+void dtl_hv_create(dtl_hv_t *self)
+{
+	if(self)
+	{
 		adt_hash_create(self->pAny,dtl_dv_dec_ref_void);
 		self->u32Flags = ((uint32_t)DTL_DV_HASH);
 		self->u32RefCnt = 1;
 	}
 }
 
-void dtl_hv_destroy(dtl_hv_t *self){
-	if(self){
+void dtl_hv_destroy(dtl_hv_t *self)
+{
+	if(self)
+	{
 		adt_hash_destroy(self->pAny);
 	}
 }
 
 
 //Accessors
-void dtl_hv_set(dtl_hv_t *self, const char *pKey, dtl_dv_t *dv, bool autoIncrementRef)
+void dtl_hv_set_cstr(dtl_hv_t *self, const char *pKey, dtl_dv_t *dv, bool autoIncrementRef)
 {
 	if(self)
 	{
@@ -81,8 +90,10 @@ void dtl_hv_set(dtl_hv_t *self, const char *pKey, dtl_dv_t *dv, bool autoIncreme
 	}
 }
 
-dtl_dv_t* dtl_hv_get(const dtl_hv_t *self, const char *pKey){
-	if(self){
+dtl_dv_t* dtl_hv_get_cstr(const dtl_hv_t *self, const char *pKey)
+{
+	if(self)
+	{
 	   void **result = adt_hash_get(self->pAny,pKey);
 	   if (result != 0)
 	   {
@@ -92,15 +103,19 @@ dtl_dv_t* dtl_hv_get(const dtl_hv_t *self, const char *pKey){
 	return (dtl_dv_t*) 0;
 }
 
-dtl_dv_t* dtl_hv_remove(dtl_hv_t *self, const char *pKey){
-	if(self){
+dtl_dv_t* dtl_hv_remove_cstr(dtl_hv_t *self, const char *pKey)
+{
+	if(self)
+	{
 		return (dtl_dv_t*) adt_hash_remove(self->pAny,pKey);
 	}
 	return (dtl_dv_t*) 0;
 }
 
-void dtl_hv_iter_init(dtl_hv_t *self){
-	if(self){
+void dtl_hv_iter_init(dtl_hv_t *self)
+{
+	if(self)
+	{
 		adt_hash_iter_init(self->pAny);
 	}
 }
@@ -110,8 +125,10 @@ void dtl_hv_iter_init(dtl_hv_t *self){
  * \param[out] pKey pointer to key string
  * \return pointer to scalar value
  */
-dtl_dv_t* dtl_hv_iter_next(dtl_hv_t *self,const char **ppKey){
-	if(self){
+dtl_dv_t* dtl_hv_iter_next_cstr(dtl_hv_t *self, const char **ppKey)
+{
+	if(self)
+	{
 		return (dtl_dv_t*) adt_hash_iter_next(self->pAny, ppKey);
 	}
 	return (dtl_dv_t*) 0;
@@ -120,15 +137,19 @@ dtl_dv_t* dtl_hv_iter_next(dtl_hv_t *self,const char **ppKey){
 
 
 //Utility functions
-uint32_t dtl_hv_length(const dtl_hv_t *self){
-	if(self){
+uint32_t dtl_hv_length(const dtl_hv_t *self)
+{
+	if(self)
+	{
 		return adt_hash_length(self->pAny);
 	}
 	return (uint32_t) 0;
 }
 
-bool dtl_hv_exists(const dtl_hv_t *self, const char *pKey){
-	if(self){
+bool dtl_hv_exists_cstr(const dtl_hv_t *self, const char *pKey)
+{
+	if(self)
+	{
 		return adt_hash_exists(self->pAny,pKey);
 	}
 	return false;

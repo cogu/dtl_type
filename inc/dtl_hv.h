@@ -54,26 +54,16 @@ void dtl_hv_delete(dtl_hv_t *self);
 void dtl_hv_create(dtl_hv_t *self);
 void dtl_hv_destroy(dtl_hv_t *self);
 
-
 //Accessors
-void dtl_hv_set(dtl_hv_t *self, const char *pKey, dtl_dv_t *dv, bool autoIncrementRef);
-dtl_dv_t* dtl_hv_get(const dtl_hv_t *self, const char *pKey);
-dtl_dv_t* dtl_hv_remove(dtl_hv_t *self, const char *pKey);
+void dtl_hv_set_cstr(dtl_hv_t *self, const char *pKey, dtl_dv_t *dv, bool autoIncrementRef);
+dtl_dv_t* dtl_hv_get_cstr(const dtl_hv_t *self, const char *pKey);
+dtl_dv_t* dtl_hv_remove_cstr(dtl_hv_t *self, const char *pKey);
 void dtl_hv_iter_init(dtl_hv_t *self);
-
-/**
- * \param[in] this hash
- * \param[out] pKey pointer to key string
- * \param[out] pKeyLen pointer to integer containing length of key string
- * \return pointer to scalar value
- */
-dtl_dv_t* dtl_hv_iter_next(dtl_hv_t *self,const char **ppKey);
-
-
+dtl_dv_t* dtl_hv_iter_next_cstr(dtl_hv_t *self,const char **ppKey);
 
 //Utility functions
 uint32_t dtl_hv_length(const dtl_hv_t *self);
-bool dtl_hv_exists(const dtl_hv_t *self, const char *pKey);
+bool dtl_hv_exists_cstr(const dtl_hv_t *self, const char *pKey);
 dtl_av_t* dtl_hv_keys(const dtl_hv_t *self);
 
 #endif //DTL_HV_H_
