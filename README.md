@@ -107,15 +107,15 @@ int main(int argc, char **argv)
 
    /*** Hash Values ***/
    dtl_hv_t *hv = dtl_hv_new();
-   dtl_hv_set(hv, "first", (dtl_dv_t*) sv1, true);
-   dtl_hv_set(hv, "second",(dtl_dv_t*) sv2, true);
-   dtl_hv_set(hv, "third", (dtl_dv_t*) sv3, true);
+   dtl_hv_set_cstr(hv, "first", (dtl_dv_t*) sv1, true);
+   dtl_hv_set_cstr(hv, "second",(dtl_dv_t*) sv2, true);
+   dtl_hv_set_cstr(hv, "third", (dtl_dv_t*) sv3, true);
    //reference count for sv1,sv2 and sv3 is now 2
 
    dtl_hv_iter_init(hv);
-   while ( (sv = (dtl_sv_t*) dtl_hv_iter_next(hv, &key)) )
+   while ( (sv = (dtl_sv_t*) dtl_hv_iter_next_cstr(hv, &key)) )
    {
-      sv = (dtl_sv_t*) dtl_hv_get(hv, key);
+      sv = (dtl_sv_t*) dtl_hv_get_cstr(hv, key);
       printf("%s: %s\n", key, dtl_sv_to_cstr(sv));
    }
    dtl_dec_ref(hv); //deletes hv
