@@ -32,6 +32,8 @@
 #include <stdbool.h>
 #include "dtl_dv.h"
 #include "adt_str.h"
+#include "adt_bytes.h"
+#include "adt_bytearray.h"
 #include "dtl_error.h"
 
 //////////////////////////////////////////////////////////////////////////////
@@ -53,10 +55,12 @@ typedef union dtl_sv_value_tag{
     uint64_t   u64;
     float      flt;
     double     dbl;
-    adt_str_t  str;
+    adt_str_t  *str;
     dtl_pv_t   ptr;
     dtl_dv_t*  dv;
     bool       bl;
+    adt_bytes_t *bytes;
+    adt_bytearray_t *bytearray;
 } dtl_sv_value_t;
 
 typedef struct dtl_svx_tag
@@ -70,6 +74,7 @@ typedef struct dtl_sv_tag{
    DTL_DV_HEAD(dtl_svx_t)
 }dtl_sv_t;
 
+//TODO: Right now we can only have 16 different types of scalar values. Change typeId to use 8 bits out of u32Flags instead of 4 bits.
 typedef enum dtl_sv_type_tag{
    DTL_SV_NONE = 0,
    DTL_SV_I32,
@@ -82,6 +87,8 @@ typedef enum dtl_sv_type_tag{
    DTL_SV_STR,
    DTL_SV_PTR,
    DTL_SV_DV,
+   DTL_SV_BYTES,
+   DTL_SV_BYTEARRAY
 } dtl_sv_type_id;
 
 //////////////////////////////////////////////////////////////////////////////
@@ -111,10 +118,15 @@ dtl_sv_t *dtl_sv_make_ptr(void *ptr,void (*pDestructor)(void*));
 dtl_sv_t *dtl_sv_make_str(const adt_str_t *str);
 dtl_sv_t *dtl_sv_make_cstr(const char* cstr);
 dtl_sv_t *dtl_sv_make_dv(dtl_dv_t *dv, bool autoIncRef);
+dtl_sv_t *dtl_sv_make_bytes(adt_bytes_t *bytes);
+dtl_sv_t *dtl_sv_make_bytearray(adt_bytearray_t *array);
 
 //getters
 dtl_sv_type_id dtl_sv_type(const dtl_sv_t* self);
 dtl_dv_type_id dtl_sv_dv_type(const dtl_sv_t* self);
+const adt_bytes_t* dtl_sv_get_bytes(const dtl_sv_t* self); //Gets a read-only copy, use dtl_sv_to_bytes in order to get a cloned object
+const adt_bytearray_t* dtl_sv_get_bytearray(const dtl_sv_t* self); //Gets a read-only copy, use dtl_sv_to_bytearray in order to get a cloned object
+
 
 //Setters
 void dtl_sv_set_i32(dtl_sv_t *self, int32_t i32);
@@ -129,6 +141,8 @@ void dtl_sv_set_str(dtl_sv_t *self, const adt_str_t *str);
 void dtl_sv_set_cstr(dtl_sv_t *self, const char* str);
 void dtl_sv_set_bstr(dtl_sv_t *self, const uint8_t *pBegin, const uint8_t *pEnd);
 void dtl_sv_set_dv(dtl_sv_t *self, dtl_dv_t *dv, bool autoIncRef);
+void dtl_sv_set_bytes(dtl_sv_t *self, adt_bytes_t *bytes);
+void dtl_sv_set_bytearray(dtl_sv_t *self, adt_bytearray_t *bytes);
 
 //Conversion functions
 int32_t dtl_sv_to_i32(const dtl_sv_t *self, bool *ok);

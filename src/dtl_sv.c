@@ -109,18 +109,22 @@ void dtl_sv_destroy(dtl_sv_t* self)
       switch(dtl_sv_type(self))
       {
       case DTL_SV_STR:
-         adt_str_destroy(&self->pAny->val.str);
+         adt_str_delete(self->pAny->val.str);
          break;
       case DTL_SV_PTR:
-         if(self->pAny->val.ptr.pDestructor)
+         if(self->pAny->val.ptr.pDestructor != 0)
          {
             self->pAny->val.ptr.pDestructor(self->pAny->val.ptr.p);
          }
          break;
       case DTL_SV_DV:
-         if(self->pAny->val.dv){
+         if(self->pAny->val.dv != 0)
+         {
             dtl_dv_dec_ref(self->pAny->val.dv);
          }
+         break;
+      case DTL_SV_BYTES:
+         adt_bytes_delete(self->pAny->val.bytes);
          break;
       default:
          break;
@@ -226,6 +230,26 @@ dtl_sv_t *dtl_sv_make_dv(dtl_dv_t *dv, bool autoIncRef)
    return self;
 }
 
+dtl_sv_t *dtl_sv_make_bytes(adt_bytes_t *bytes)
+{
+   dtl_sv_t *self = dtl_sv_new();
+   if(self)
+   {
+      dtl_sv_set_bytes(self, bytes);
+   }
+   return self;
+}
+
+dtl_sv_t *dtl_sv_make_bytearray(adt_bytearray_t *array)
+{
+   dtl_sv_t *self = dtl_sv_new();
+   if(self)
+   {
+      dtl_sv_set_bytearray(self, array);
+   }
+   return self;
+}
+
 dtl_sv_type_id dtl_sv_type(const dtl_sv_t* self){
    if(self){
       uint8_t u8Type = (uint8_t) ((self->u32Flags & DTL_SV_TYPE_MASK)>>DTL_SV_TYPE_SHIFT);
@@ -323,7 +347,7 @@ void dtl_sv_set_str(dtl_sv_t *self, const adt_str_t *str)
    if (self != 0)
    {
       dtl_sv_set_type(self, DTL_SV_STR);
-      adt_str_set(&self->pAny->val.str, str);
+      adt_str_set(self->pAny->val.str, str);
    }
 }
 
@@ -331,7 +355,7 @@ void dtl_sv_set_cstr(dtl_sv_t *self, const char* cstr){
    if(self != 0)
    {
       dtl_sv_set_type(self, DTL_SV_STR);
-      adt_str_set_cstr(&self->pAny->val.str, cstr);
+      adt_str_set_cstr(self->pAny->val.str, cstr);
    }
 }
 
@@ -340,7 +364,7 @@ void dtl_sv_set_bstr(dtl_sv_t *self, const uint8_t *pBegin, const uint8_t *pEnd)
    if ( (self != 0) && (pBegin != 0) && (pEnd != 0) && (pBegin<=pEnd) )
    {
       dtl_sv_set_type(self, DTL_SV_STR);
-      adt_str_set_bstr(&self->pAny->val.str, pBegin, pEnd);
+      adt_str_set_bstr(self->pAny->val.str, pBegin, pEnd);
    }
 }
 
@@ -356,6 +380,18 @@ void dtl_sv_set_dv(dtl_sv_t *self, dtl_dv_t *dv, bool autoIncRef)
       }
    }
 }
+
+void dtl_sv_set_bytes(dtl_sv_t *self, adt_bytes_t *bytes)
+{
+   dtl_sv_set_type(self, DTL_SV_BYTES);
+   self->pAny->val.bytes = adt_bytes_clone(bytes);
+}
+
+void dtl_sv_set_bytearray(dtl_sv_t *self, adt_bytearray_t *bytes)
+{
+
+}
+
 
 
 //Getters
@@ -401,6 +437,10 @@ int32_t dtl_sv_to_i32(const dtl_sv_t *self, bool *ok)
       case DTL_SV_PTR:
          break;
       case DTL_SV_DV:
+         break;
+      case DTL_SV_BYTES:
+         break;
+      case DTL_SV_BYTEARRAY:
          break;
       }
    }
@@ -453,6 +493,10 @@ uint32_t dtl_sv_to_u32(const dtl_sv_t *self, bool *ok)
       case DTL_SV_PTR:
          break;
       case DTL_SV_DV:
+         break;
+      case DTL_SV_BYTES:
+         break;
+      case DTL_SV_BYTEARRAY:
          break;
       }
    }
@@ -507,6 +551,10 @@ int64_t dtl_sv_to_i64(const dtl_sv_t *self, bool *ok)
          break;
       case DTL_SV_DV:
          break;
+      case DTL_SV_BYTES:
+         break;
+      case DTL_SV_BYTEARRAY:
+         break;
       }
    }
    if (ok != 0)
@@ -559,6 +607,10 @@ uint64_t dtl_sv_to_u64(const dtl_sv_t *self, bool *ok)
       case DTL_SV_PTR:
          break;
       case DTL_SV_DV:
+         break;
+      case DTL_SV_BYTES:
+         break;
+      case DTL_SV_BYTEARRAY:
          break;
       }
    }
@@ -615,6 +667,10 @@ float dtl_sv_to_flt(const dtl_sv_t *self, bool *ok)
          break;
       case DTL_SV_DV:
          break;
+      case DTL_SV_BYTES:
+         break;
+      case DTL_SV_BYTEARRAY:
+         break;
       }
    }
    if (ok != 0)
@@ -669,6 +725,10 @@ double dtl_sv_to_dbl(const dtl_sv_t *self, bool *ok)
          break;
       case DTL_SV_DV:
          break;
+      case DTL_SV_BYTES:
+         break;
+      case DTL_SV_BYTEARRAY:
+         break;
       }
    }
    if (ok != 0)
@@ -698,11 +758,15 @@ bool dtl_sv_to_bool(const dtl_sv_t *self){
       case DTL_SV_BOOL:
          return self->pAny->val.bl;
       case DTL_SV_STR:
-         if (adt_str_equal_cstr(&self->pAny->val.str, "true") ) return true;
+         if (adt_str_equal_cstr(self->pAny->val.str, "true") ) return true;
          break;
       case DTL_SV_PTR:
          break;
       case DTL_SV_DV:
+         break;
+      case DTL_SV_BYTES:
+         break;
+      case DTL_SV_BYTEARRAY:
          break;
       }
    }
@@ -736,6 +800,10 @@ void* dtl_sv_to_ptr(const dtl_sv_t *self){
          break;
       case DTL_SV_DV:
          return (void*) self->pAny->val.dv;
+         break;
+      case DTL_SV_BYTES:
+         break;
+      case DTL_SV_BYTEARRAY:
          break;
       }
    }
@@ -771,10 +839,14 @@ const char* dtl_sv_to_cstr(dtl_sv_t *self){
       case DTL_SV_BOOL:
          return self->pAny->val.bl? "true" : "false";
       case DTL_SV_STR:
-         return adt_str_cstr(&self->pAny->val.str);
+         return adt_str_cstr(self->pAny->val.str);
       case DTL_SV_PTR:
          break;
       case DTL_SV_DV:
+         break;
+      case DTL_SV_BYTES:
+         break;
+      case DTL_SV_BYTEARRAY:
          break;
       }
    }
@@ -928,7 +1000,7 @@ dtl_error_t dtl_sv_lt(const dtl_sv_t *self, const dtl_sv_t *other, bool *result)
       case DTL_SV_STR:
          if (rightType == DTL_SV_STR)
          {
-            int tmp = adt_str_lt(&self->pAny->val.str, &other->pAny->val.str);
+            int tmp = adt_str_lt(self->pAny->val.str, other->pAny->val.str);
             if (tmp >= 0)
             {
                *result = (bool) tmp;
@@ -948,6 +1020,27 @@ dtl_error_t dtl_sv_lt(const dtl_sv_t *self, const dtl_sv_t *other, bool *result)
    return DTL_INVALID_ARGUMENT_ERROR;
 }
 
+const adt_bytes_t* dtl_sv_get_bytes(const dtl_sv_t* self)
+{
+   const adt_bytes_t *retval = (const adt_bytes_t*) 0;
+   if (self != 0)
+   {
+      dtl_sv_type_id currentType = dtl_sv_type(self);
+      if (currentType == DTL_SV_BYTES)
+      {
+         retval = self->pAny->val.bytes;
+      }
+   }
+   return retval;
+}
+
+const adt_bytearray_t* dtl_sv_get_bytearray(const dtl_sv_t* self)
+{
+   const adt_bytearray_t *retval = (const adt_bytearray_t*) 0;
+   return retval;
+}
+
+
 
 //////////////////////////////////////////////////////////////////////////////
 // PRIVATE FUNCTIONS
@@ -959,16 +1052,31 @@ static void dtl_sv_set_type(dtl_sv_t *self, dtl_sv_type_id newType)
    {
       dtl_dv_dec_ref(self->pAny->val.dv);
    }
+   else if (currentType == DTL_SV_STR)
+   {
+      if (newType != DTL_SV_STR)
+      {
+         adt_str_delete(self->pAny->val.str);
+      }
+   }
+   else if (currentType == DTL_SV_BYTES)
+   {
+      adt_bytes_delete(self->pAny->val.bytes);
+      self->pAny->val.bytes = (adt_bytes_t*) 0;
+   }
+   else
+   {
+
+   }
+   if (newType == DTL_SV_STR)
+   {
+      if (currentType != DTL_SV_STR)
+      {
+         self->pAny->val.str = adt_str_new();
+      }
+   }
    self->u32Flags &= ~((uint32_t)DTL_SV_TYPE_MASK);
    self->u32Flags |= (((uint32_t)newType)<<DTL_SV_TYPE_SHIFT) & DTL_SV_TYPE_MASK;
-   if ( (currentType == DTL_SV_STR) && (newType != DTL_SV_STR) )
-   {
-      adt_str_destroy(&self->pAny->val.str);
-   }
-   if ( (currentType != DTL_SV_STR) && (newType == DTL_SV_STR) )
-   {
-      adt_str_create(&self->pAny->val.str);
-   }
 }
 
 static void dtl_sv_ztrim(char *str)
@@ -1058,13 +1166,17 @@ static void dtl_sv_to_string_internal(const dtl_sv_t *self, adt_str_t* str)
       }
       break;
    case DTL_SV_STR:
-      adt_str_set(str, &self->pAny->val.str);
+      adt_str_set(str, self->pAny->val.str);
       break;
    case DTL_SV_PTR:
       sprintf(numBuf,"%p", dtl_sv_to_ptr(self));
       isNum = true;
       break;
    case DTL_SV_DV:
+      break;
+   case DTL_SV_BYTES:
+      break;
+   case DTL_SV_BYTEARRAY:
       break;
    }
    if(isNum)
