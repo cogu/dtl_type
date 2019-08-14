@@ -88,6 +88,7 @@ static void test_dtl_sv_make(CuTest* tc)
 	CuAssertIntEquals(tc, 124, dtl_sv_to_i32(sv, NULL));
 	dtl_sv_delete(sv);
 
+
 	//uint32_t
 	sv = dtl_sv_make_u32(8328);
 	CuAssertPtrNotNull(tc, sv);
@@ -144,6 +145,18 @@ static void test_dtl_sv_make(CuTest* tc)
 	dtl_dec_ref(sv2);
 	CuAssertIntEquals(tc, 1, dtl_ref_cnt(sv));
 	dtl_dec_ref(sv);
+
+	//bytes
+	uint8_t u8Data[3] = {39, 86, 14};
+	adt_bytes_t *bytes1 = adt_bytes_new(&u8Data[0], sizeof(u8Data));
+	sv = dtl_sv_make_bytes(bytes1);
+	CuAssertPtrNotNull(tc, sv);
+	CuAssertIntEquals(tc, DTL_SV_BYTES, dtl_sv_type(sv));
+	const adt_bytes_t *bytes2 = dtl_sv_get_bytes(sv); //bytes2 is a read-only weak pointer. Memory is still managed by dtl_sv_t.
+	CuAssertPtrNotNull(tc, bytes2);
+	CuAssertTrue(tc, adt_bytes_equals(bytes1, bytes2));
+	dtl_dec_ref(sv);
+	adt_bytes_delete(bytes1);
 }
 
 static void test_dtl_sv_bool(CuTest* tc)
