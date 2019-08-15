@@ -240,6 +240,16 @@ dtl_sv_t *dtl_sv_make_bytes(adt_bytes_t *bytes)
    return self;
 }
 
+dtl_sv_t *dtl_sv_make_bytes_raw(const uint8_t *dataBuf, uint32_t dataLen)
+{
+   dtl_sv_t *self = dtl_sv_new();
+   if(self)
+   {
+      dtl_sv_set_bytes_raw(self, dataBuf, dataLen);
+   }
+   return self;
+}
+
 dtl_sv_t *dtl_sv_make_bytearray(adt_bytearray_t *array)
 {
    dtl_sv_t *self = dtl_sv_new();
@@ -385,6 +395,12 @@ void dtl_sv_set_bytes(dtl_sv_t *self, adt_bytes_t *bytes)
 {
    dtl_sv_set_type(self, DTL_SV_BYTES);
    self->pAny->val.bytes = adt_bytes_clone(bytes);
+}
+
+void dtl_sv_set_bytes_raw(dtl_sv_t *self, const uint8_t *dataBuf, uint32_t dataLen)
+{
+   dtl_sv_set_type(self, DTL_SV_BYTES);
+   self->pAny->val.bytes = adt_bytes_new(dataBuf, dataLen);
 }
 
 void dtl_sv_set_bytearray(dtl_sv_t *self, adt_bytearray_t *bytes)
