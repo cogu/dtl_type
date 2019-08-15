@@ -44,6 +44,7 @@
 // PRIVATE CONSTANTS AND DATA TYPES
 //////////////////////////////////////////////////////////////////////////////
 #define MAX_NUM_BUF 128
+#define BYTEARRAY_DEFAULT_GROWSIZE 256
 //////////////////////////////////////////////////////////////////////////////
 // PRIVATE FUNCTION PROTOTYPES
 //////////////////////////////////////////////////////////////////////////////
@@ -125,6 +126,9 @@ void dtl_sv_destroy(dtl_sv_t* self)
          break;
       case DTL_SV_BYTES:
          adt_bytes_delete(self->pAny->val.bytes);
+         break;
+      case DTL_SV_BYTEARRAY:
+         adt_bytearray_delete(self->pAny->val.bytearray);
          break;
       default:
          break;
@@ -256,6 +260,16 @@ dtl_sv_t *dtl_sv_make_bytearray(adt_bytearray_t *array)
    if(self)
    {
       dtl_sv_set_bytearray(self, array);
+   }
+   return self;
+}
+
+dtl_sv_t *dtl_sv_make_bytearray_raw(const uint8_t *dataBuf, uint32_t dataLen)
+{
+   dtl_sv_t *self = dtl_sv_new();
+   if(self)
+   {
+      dtl_sv_set_bytearray_raw(self, dataBuf, dataLen);
    }
    return self;
 }
@@ -403,11 +417,17 @@ void dtl_sv_set_bytes_raw(dtl_sv_t *self, const uint8_t *dataBuf, uint32_t dataL
    self->pAny->val.bytes = adt_bytes_new(dataBuf, dataLen);
 }
 
-void dtl_sv_set_bytearray(dtl_sv_t *self, adt_bytearray_t *bytes)
+void dtl_sv_set_bytearray(dtl_sv_t *self, adt_bytearray_t *array)
 {
-
+   dtl_sv_set_type(self, DTL_SV_BYTEARRAY);
+   adt_bytearray_append(self->pAny->val.bytearray, array->pData, array->u32CurLen);
 }
 
+void dtl_sv_set_bytearray_raw(dtl_sv_t *self, const uint8_t *dataBuf, uint32_t dataLen)
+{
+   dtl_sv_set_type(self, DTL_SV_BYTEARRAY);
+   adt_bytearray_append(self->pAny->val.bytearray, dataBuf, dataLen);
+}
 
 
 //Getters
@@ -1053,6 +1073,14 @@ const adt_bytes_t* dtl_sv_get_bytes(const dtl_sv_t* self)
 const adt_bytearray_t* dtl_sv_get_bytearray(const dtl_sv_t* self)
 {
    const adt_bytearray_t *retval = (const adt_bytearray_t*) 0;
+   if (self != 0)
+   {
+      dtl_sv_type_id currentType = dtl_sv_type(self);
+      if (currentType == DTL_SV_BYTEARRAY)
+      {
+         retval = self->pAny->val.bytearray;
+      }
+   }
    return retval;
 }
 
@@ -1080,17 +1108,42 @@ static void dtl_sv_set_type(dtl_sv_t *self, dtl_sv_type_id newType)
       adt_bytes_delete(self->pAny->val.bytes);
       self->pAny->val.bytes = (adt_bytes_t*) 0;
    }
+   else if (currentType == DTL_SV_BYTEARRAY)
+   {
+      if (newType != DTL_SV_BYTEARRAY)
+      {
+         adt_bytearray_delete(self->pAny->val.bytearray);
+         self->pAny->val.bytearray = (adt_bytearray_t*) 0;
+      }
+   }
    else
    {
 
    }
+
    if (newType == DTL_SV_STR)
    {
       if (currentType != DTL_SV_STR)
       {
          self->pAny->val.str = adt_str_new();
       }
+      else
+      {
+         adt_str_clear(self->pAny->val.str);
+      }
    }
+   else if(newType == DTL_SV_BYTEARRAY)
+   {
+      if (currentType != DTL_SV_BYTEARRAY)
+      {
+         self->pAny->val.bytearray = adt_bytearray_new(BYTEARRAY_DEFAULT_GROWSIZE);
+      }
+      else
+      {
+         adt_bytearray_clear(self->pAny->val.bytearray);
+      }
+   }
+
    self->u32Flags &= ~((uint32_t)DTL_SV_TYPE_MASK);
    self->u32Flags |= (((uint32_t)newType)<<DTL_SV_TYPE_SHIFT) & DTL_SV_TYPE_MASK;
 }
