@@ -119,6 +119,7 @@ dtl_sv_t *dtl_sv_make_str(const adt_str_t *str);
 dtl_sv_t *dtl_sv_make_cstr(const char* cstr);
 dtl_sv_t *dtl_sv_make_dv(dtl_dv_t *dv, bool autoIncRef);
 dtl_sv_t *dtl_sv_make_bytes(adt_bytes_t *bytes);
+dtl_sv_t *dtl_sv_make_bytes_raw(const uint8_t *dataBuf, uint32_t dataLen);
 dtl_sv_t *dtl_sv_make_bytearray(adt_bytearray_t *array);
 
 //getters
@@ -142,6 +143,7 @@ void dtl_sv_set_cstr(dtl_sv_t *self, const char* str);
 void dtl_sv_set_bstr(dtl_sv_t *self, const uint8_t *pBegin, const uint8_t *pEnd);
 void dtl_sv_set_dv(dtl_sv_t *self, dtl_dv_t *dv, bool autoIncRef);
 void dtl_sv_set_bytes(dtl_sv_t *self, adt_bytes_t *bytes);
+void dtl_sv_set_bytes_raw(dtl_sv_t *self, const uint8_t *dataBuf, uint32_t dataLen);
 void dtl_sv_set_bytearray(dtl_sv_t *self, adt_bytearray_t *bytes);
 
 //Conversion functions
