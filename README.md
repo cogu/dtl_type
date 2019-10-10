@@ -26,6 +26,8 @@ A dynamic value can be any of the following types:
 * Array Value (AV)
 * Hash Value (HV)
 
+![Class Hierarchy](_static/dtl_class_hierarchy.png)
+
 ## Scalar Values (SV)
 
 A scalar contains a single unit of data.
