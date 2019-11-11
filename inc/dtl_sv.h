@@ -147,6 +147,7 @@ void dtl_sv_set_bytes(dtl_sv_t *self, adt_bytes_t *bytes);
 void dtl_sv_set_bytes_raw(dtl_sv_t *self, const uint8_t *dataBuf, uint32_t dataLen);
 void dtl_sv_set_bytearray(dtl_sv_t *self, adt_bytearray_t *array);
 void dtl_sv_set_bytearray_raw(dtl_sv_t *self, const uint8_t *dataBuf, uint32_t dataLen);
+void dtl_sv_take_bytes(dtl_sv_t *self, adt_bytes_t *bytes);
 
 //Conversion functions
 int32_t dtl_sv_to_i32(const dtl_sv_t *self, bool *ok);

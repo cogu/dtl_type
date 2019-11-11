@@ -407,14 +407,20 @@ void dtl_sv_set_dv(dtl_sv_t *self, dtl_dv_t *dv, bool autoIncRef)
 
 void dtl_sv_set_bytes(dtl_sv_t *self, adt_bytes_t *bytes)
 {
-   dtl_sv_set_type(self, DTL_SV_BYTES);
-   self->pAny->val.bytes = adt_bytes_clone(bytes);
+   if (self != 0)
+   {
+      dtl_sv_set_type(self, DTL_SV_BYTES);
+      self->pAny->val.bytes = adt_bytes_clone(bytes);
+   }
 }
 
 void dtl_sv_set_bytes_raw(dtl_sv_t *self, const uint8_t *dataBuf, uint32_t dataLen)
 {
-   dtl_sv_set_type(self, DTL_SV_BYTES);
-   self->pAny->val.bytes = adt_bytes_new(dataBuf, dataLen);
+   if (self != 0)
+   {
+      dtl_sv_set_type(self, DTL_SV_BYTES);
+      self->pAny->val.bytes = adt_bytes_new(dataBuf, dataLen);
+   }
 }
 
 void dtl_sv_set_bytearray(dtl_sv_t *self, adt_bytearray_t *array)
@@ -425,8 +431,20 @@ void dtl_sv_set_bytearray(dtl_sv_t *self, adt_bytearray_t *array)
 
 void dtl_sv_set_bytearray_raw(dtl_sv_t *self, const uint8_t *dataBuf, uint32_t dataLen)
 {
-   dtl_sv_set_type(self, DTL_SV_BYTEARRAY);
-   adt_bytearray_append(self->pAny->val.bytearray, dataBuf, dataLen);
+   if (self != 0)
+   {
+      dtl_sv_set_type(self, DTL_SV_BYTEARRAY);
+      adt_bytearray_append(self->pAny->val.bytearray, dataBuf, dataLen);
+   }
+}
+
+void dtl_sv_take_bytes(dtl_sv_t *self, adt_bytes_t *bytes)
+{
+   if (self != 0)
+   {
+      dtl_sv_set_type(self, DTL_SV_BYTES);
+      self->pAny->val.bytes = bytes;
+   }
 }
 
 
