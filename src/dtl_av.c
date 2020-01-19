@@ -251,6 +251,10 @@ static adt_error_t dtl_av_insertion_sort(dtl_av_t *self, bool reverse)
                   if ( (leftType == DTL_DV_SCALAR) )
                   {
                      errorCode = dtl_sv_lt( (dtl_sv_t*) left, (dtl_sv_t*) right, &result);
+                     if (errorCode != DTL_NO_ERROR)
+                     {
+                        return errorCode;
+                     }
                   }
                   else
                   {
