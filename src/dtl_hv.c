@@ -129,7 +129,11 @@ dtl_dv_t* dtl_hv_iter_next_cstr(dtl_hv_t *self, const char **ppKey)
 {
 	if(self)
 	{
-		return (dtl_dv_t*) adt_hash_iter_next(self->pAny, ppKey);
+	   void **ppValue = adt_hash_iter_next(self->pAny, ppKey);
+	   if (ppValue != 0)
+	   {
+	      return (dtl_dv_t*) *ppValue;
+	   }
 	}
 	return (dtl_dv_t*) 0;
 }

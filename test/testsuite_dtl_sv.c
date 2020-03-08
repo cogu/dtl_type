@@ -169,7 +169,7 @@ static void test_dtl_sv_make(CuTest* tc)
    bytes2 = dtl_sv_get_bytes(sv);
    CuAssertPtrNotNull(tc, bytes2);
    CuAssertUIntEquals(tc, sizeof(u8Data), adt_bytes_length(bytes2));
-   CuAssertIntEquals(tc, 0, memcmp(u8Data, adt_bytes_data(bytes2), sizeof(u8Data)));
+   CuAssertIntEquals(tc, 0, memcmp(u8Data, adt_bytes_constData(bytes2), sizeof(u8Data)));
    dtl_dec_ref(sv);
 
    //bytearray

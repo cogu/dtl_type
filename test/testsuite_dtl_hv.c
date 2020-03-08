@@ -46,6 +46,7 @@
 static void test_dtl_hv_new_delete(CuTest* tc);
 static void test_dtl_hv_get_cstr_set(CuTest* tc);
 static void test_dtl_hv_keys_sorted(CuTest* tc);
+static void test_dtl_hv_iter(CuTest* tc);
 
 //////////////////////////////////////////////////////////////////////////////
 // PRIVATE VARIABLES
@@ -61,6 +62,7 @@ CuSuite* testsuite_dtl_hv(void)
    SUITE_ADD_TEST(suite, test_dtl_hv_new_delete);
    SUITE_ADD_TEST(suite, test_dtl_hv_get_cstr_set);
    SUITE_ADD_TEST(suite, test_dtl_hv_keys_sorted);
+   SUITE_ADD_TEST(suite, test_dtl_hv_iter);
 
    return suite;
 }
@@ -128,5 +130,34 @@ static void test_dtl_hv_keys_sorted(CuTest* tc)
    CuAssertStrEquals(tc, "Texas", dtl_sv_to_cstr((dtl_sv_t*) dtl_av_value(keys, 5)));
 
    dtl_dec_ref(keys);
+   dtl_dec_ref(hv);
+}
+
+static void test_dtl_hv_iter(CuTest* tc)
+{
+   dtl_hv_t *hv = dtl_hv_new();
+   dtl_dv_t *dv;
+   const char *key;
+
+   CuAssertPtrNotNull(tc, hv);
+
+   dtl_hv_set_cstr(hv,"First",(dtl_dv_t*) dtl_sv_make_i32(1), false);
+   dtl_hv_set_cstr(hv,"Second",(dtl_dv_t*) dtl_sv_make_i32(2), false);
+   dtl_hv_set_cstr(hv,"Third",(dtl_dv_t*) dtl_sv_make_i32(4), false);
+
+   CuAssertIntEquals(tc, 3, dtl_hv_length(hv));
+   dtl_hv_iter_init(hv);
+   dv = dtl_hv_iter_next_cstr(hv, &key);
+   CuAssertStrEquals(tc, "First", key);
+   CuAssertPtrEquals(tc, dtl_hv_get_cstr(hv, "First"), dv);
+   dv = dtl_hv_iter_next_cstr(hv, &key);
+   CuAssertStrEquals(tc, "Second", key);
+   CuAssertPtrEquals(tc, dtl_hv_get_cstr(hv, "Second"), dv);
+   dv = dtl_hv_iter_next_cstr(hv, &key);
+   CuAssertStrEquals(tc, "Third", key);
+   CuAssertPtrEquals(tc, dtl_hv_get_cstr(hv, "Third"), dv);
+   dv = dtl_hv_iter_next_cstr(hv, &key);
+   CuAssertPtrEquals(tc, NULL, dv);
+
    dtl_dec_ref(hv);
 }
