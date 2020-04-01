@@ -1,0 +1,79 @@
+cmake_minimum_required(VERSION 3.14)
+
+include(cmake/BuildTypes.cmake)
+include(cmake/LeakCheck.cmake)
+include(cmake/UnitTest.cmake)
+
+if (LEAK_CHECK)
+    message(STATUS "LEAK_CHECK=${LEAK_CHECK} (DTL_TYPE)")
+endif()
+
+if (UNIT_TEST)
+    message(STATUS "UNIT_TEST=${UNIT_TEST} (DTL_TYPE)")
+endif()
+
+
+### Library dtl_type
+set (DTL_TYPE_HEADER_LIST
+    inc/dtl_av.h
+    inc/dtl_dv.h
+    inc/dtl_error.h
+    inc/dtl_hv.h
+    inc/dtl_sv.h
+    inc/dtl_type.h
+)
+
+set (DTL_TYPE_SOURCE_LIST
+    src/dtl_av.c
+    src/dtl_dv.c
+    src/dtl_hv.c
+    src/dtl_sv.c
+)
+
+add_library(dtl_type ${DTL_TYPE_SOURCE_LIST} ${DTL_TYPE_HEADER_LIST})
+
+target_include_directories(dtl_type PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/inc)
+
+if (UNIT_TEST)
+    target_compile_definitions(dtl_type PRIVATE UNIT_TEST)
+endif()
+
+if (LEAK_CHECK)
+    target_compile_definitions(dtl_type PRIVATE MEM_LEAK_CHECK)
+    target_link_libraries(dtl_type PRIVATE cutil)
+endif()
+
+target_link_libraries(dtl_type PRIVATE adt)
+###
+
+### Executable dtl_type_unit
+project(dtl_type_unit LANGUAGES C VERSION 1.0)
+
+if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
+    add_subdirectory(../adt ${CMAKE_CURRENT_BINARY_DIR}/adt)
+    add_subdirectory(../cutil ${CMAKE_CURRENT_BINARY_DIR}/cutil)
+endif()
+
+
+set (DTL_TYPE_SUITE_LIST
+    test/testsuite_dtl_av.c
+    test/testsuite_dtl_dv.c
+    test/testsuite_dtl_hv.c
+    test/testsuite_dtl_sv.c
+)
+
+add_executable(dtl_type_unit local/test/AllTests.c ${DTL_TYPE_SUITE_LIST} )
+
+target_link_libraries(dtl_type_unit PUBLIC dtl_type adt cutest cutil)
+
+target_include_directories(dtl_type_unit PRIVATE
+                          "${PROJECT_BINARY_DIR}"
+                          "${CMAKE_CURRENT_SOURCE_DIR}/inc"
+                          )
+target_compile_definitions(dtl_type_unit PRIVATE UNIT_TEST)
+
+if (LEAK_CHECK)
+target_compile_definitions(dtl_type_unit PRIVATE MEM_LEAK_CHECK)
+target_link_libraries(dtl_type_unit PRIVATE cutil)
+endif()
+

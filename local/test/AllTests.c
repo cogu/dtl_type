@@ -1,7 +1,9 @@
 #include <stdio.h>
 #include <malloc.h>
 #include "CuTest.h"
+#ifdef MEM_LEAK_CHECK
 #include "CMemLeak.h"
+#endif
 
 
 CuSuite* testsuite_dtl_dv(void);

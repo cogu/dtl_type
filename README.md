@@ -1,6 +1,10 @@
-# dtl_type library
+# dtl_type
 
-A Dynamically Typed Language (or DTL) is a generic term for a modern scripting language (such as Python, Perl or Javascript).
+A dynamic type system for the C programming language.
+
+## What is it?
+
+A Dynamically Typed Language (or DTL) is a generic term for a modern scripting language such as Python, Perl or Javascript.
 Such languages usually contains many parts:
 
 * Language syntax
@@ -9,63 +13,62 @@ Such languages usually contains many parts:
   * Type system
 * Language Libraries
 
-In dtl_type I have implemnted only the type system without any of the other language components. It is inspired by the Perl type system and uses similar terminology.
+In dtl_type I have implemnted just the type system without any of the other language components. It is inspired by the Perl type system and uses similar terminology.
 
 Using this library you can easily build arbitrarily complex data structures in runtime using the C programming language.
 All values are reference counted which significantly simplifies memory management. The initial reference count of newly created values is 1.
 
-In some programming languages (or libraries) you might have something called "Variant". This is a similar idea to what this library is trying to achieve.
+Some programming languages (or libraries) might provide a special kind of data type called *Variant*, this library offers a similar solution for the C programming language.
 
-## Dynamic Value (DV)
+## Where is it used?
 
-This is the base class which all other value types inherits from. (This is sort of a pseudo-statement since C have neither classes or inheritance).
+* [cogu/dtl_json](https://github.com/cogu/dtl_json)
+* [cogu/c-apx](https://github.com/cogu/c-apx)
 
-A dynamic value can be any of the following types:
+This repo is a submodule of the [cogu/c-apx](https://github.com/cogu/c-apx) (top-level) project.
 
-* Scalar Value (SV)
-* Array Value (AV)
-* Hash Value (HV)
-
-![Class Hierarchy](_static/dtl_class_hierarchy.png)
-
-## Scalar Values (SV)
-
-A scalar contains a single unit of data.
-
-Example of scalar types:
-
-* Integer
-* Double
-* String
-* Boolean
-* NoneType (this name is actually borrowed from Python)
-
-## Array Values (AV)
-
-Array values are managed arrays containing dynamic values (DVs).
-
-Examples:
-
-* Array of scalar values
-* Array of array values
-* Array of hash values
-* Array of mixed values (any of the above)
-
-
-## Hash Values (HV)
-
-Hash values are key-value lookup tables where the key is a string and the value is any dynamic value (DV).
-
-# Dependencies
+## Dependencies
 
 * [cogu/adt](https://github.com/cogu/adt)
+* [cogu/cutil](https://github.com/cogu/cutil)
 
-This repo depends on some of my other repos. The unit test project(s) assumes that repos are cloned (separately) into a common directory.
+The unit test project(s) assume that the repos are cloned (separately) into a common directory as seen below.
 
 * adt
+* cutil
 * dtl_type (this repo)
 
-# Usage
+### Git Example
+
+```bash
+$ cd ~
+$ mkdir repo && cd repo
+$ git clone https://github.com/cogu/adt.git
+$ git clone https://github.com/cogu/cutil.git
+$ git clone https://github.com/cogu/dtl_type.git
+$ cd dtl_type
+```
+
+## Building with CMake
+
+CMake files exist but has so far only been tested on Linux.
+
+First clone this repo and its dependencies into a common directory (such as ~/repo) as seen above. Alternatively the repos can be submodules of a top-level repo (as seen in [cogu/c-apx](https://github.com/cogu/c-apx)).
+
+### Running unit tests (Linux)
+
+```bash
+$ mkdir UnitTest && cd UnitTest
+$ cmake -DCMAKE_BUILD_TYPE=UnitTest ..
+$ cmake --build .
+$ ./dtl_type_unit
+```
+
+## Related projects
+
+The [cogu/dtl_json](https://github.com/cogu/dtl_json) project provides JSON serialization and deserialization routines based on the dtl_type system.
+
+## Usage
 
 ``` C
 #include <stdio.h>
@@ -102,10 +105,8 @@ int main(int argc, char **argv)
       const char *cstr = dtl_sv_to_cstr(sv);
       printf("%s\n", cstr );
    }
-   dtl_dec_ref(av); //deletes av. Reference count for sv1,sv2 and sv3 is now 1
+   dtl_dec_ref(av); //deletes av. Reference count for sv1, sv2 and sv3 is now 1
    printf("\n");
-
-   const char *key;
 
    /*** Hash Values ***/
    dtl_hv_t *hv = dtl_hv_new();
@@ -114,6 +115,7 @@ int main(int argc, char **argv)
    dtl_hv_set_cstr(hv, "third", (dtl_dv_t*) sv3, true);
    //reference count for sv1,sv2 and sv3 is now 2
 
+   const char *key;
    dtl_hv_iter_init(hv);
    while ( (sv = (dtl_sv_t*) dtl_hv_iter_next_cstr(hv, &key)) )
    {
@@ -121,7 +123,7 @@ int main(int argc, char **argv)
       printf("%s: %s\n", key, dtl_sv_to_cstr(sv));
    }
    dtl_dec_ref(hv); //deletes hv
-   //reference count for sv1,sv2 and sv3 is now 1
+   //reference count for sv1, sv2 and sv3 is now 1
 
    /*** cleanup ***/
    dtl_dec_ref(sv1); //deletes sv1 (reference count -> 0)
@@ -132,11 +134,42 @@ int main(int argc, char **argv)
 }
 ```
 
+## Dynamic Value (DV)
+
+This is the base class which all other value types inherits from. (This is a pseudo-statement since C have neither classes or inheritance-)
+
+A dynamic value can be any of the following types:
+
+* Scalar Value (SV)
+* Array Value (AV)
+* Hash Value (HV)
+
+![Class Hierarchy](_static/dtl_class_hierarchy.png)
+
+## Scalar Values (SV)
+
+A scalar contains a single unit of data.
+
+Example of scalar types:
+
+* Integer
+* Double
+* String
+* Boolean
+* NoneType (this name is actually borrowed from Python)
+
+## Array Values (AV)
+
+Array values are managed arrays containing dynamic values (DVs).
+
+Examples:
+
+* Array of scalar values
+* Array of array values
+* Array of hash values
+* Array of mixed values (any of the above)
 
 
+## Hash Values (HV)
 
-
-
-
-
-
+Hash values are key-value lookup tables where the key is a string and the value is any dynamic value (DV).
