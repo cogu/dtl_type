@@ -63,7 +63,7 @@ if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
             test/testsuite_dtl_sv.c
         )
 
-        add_executable(dtl_type_unit local/test/AllTests.c ${DTL_TYPE_SUITE_LIST} )
+        add_executable(dtl_type_unit test/test_main.c ${DTL_TYPE_SUITE_LIST} )
 
         target_link_libraries(dtl_type_unit PRIVATE dtl_type adt cutest cutil)
 
