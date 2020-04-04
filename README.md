@@ -41,32 +41,42 @@ The unit test project(s) assume that the repos are cloned (separately) into a co
 ### Git Example
 
 ```bash
-$ cd ~
-$ mkdir repo && cd repo
-$ git clone https://github.com/cogu/adt.git
-$ git clone https://github.com/cogu/cutil.git
-$ git clone https://github.com/cogu/dtl_type.git
-$ cd dtl_type
-```
-
-## Building with CMake
-
-CMake files exist but has so far only been tested on Linux.
-
-First clone this repo and its dependencies into a common directory (such as ~/repo) as seen above. Alternatively the repos can be submodules of a top-level repo (as seen in [cogu/c-apx](https://github.com/cogu/c-apx)).
-
-### Running unit tests (Linux)
-
-```bash
-$ mkdir UnitTest && cd UnitTest
-$ cmake -DCMAKE_BUILD_TYPE=UnitTest ..
-$ cmake --build .
-$ ./dtl_type_unit
+cd ~
+mkdir repo && cd repo
+git clone https://github.com/cogu/adt.git
+git clone https://github.com/cogu/cutil.git
+git clone https://github.com/cogu/dtl_type.git
+cd dtl_type
 ```
 
 ## Related projects
 
 The [cogu/dtl_json](https://github.com/cogu/dtl_json) project provides JSON serialization and deserialization routines based on the dtl_type system.
+
+## Building with CMake
+
+First clone this repo and its dependencies into a common directory (such as ~/repo) as seen above. Alternatively the repos can be submodules of a top-level repo (as seen in [cogu/c-apx](https://github.com/cogu/c-apx)).
+
+### Running unit tests (Linux with GCC)
+
+```bash
+mkdir UnitTest && cd UnitTest
+cmake -DUNIT_TEST=ON -DLEAK_CHECK=ON ..
+cmake --build .
+./dtl_type_unit
+```
+
+### Running unit tests (Windows with Visual Studio)
+
+Use a Visual Studio command prompt from the start menu, such as "x64 Native Tools Command Prompt for VS2019".
+It conveniently comes pre-installed with a version of CMake that generates Visual Studio projects by default.
+
+```cmd
+mkdir UnitTest && cd UnitTest
+cmake -DUNIT_TEST=ON -DLEAK_CHECK=ON ..
+cmake --build . --config Debug
+Debug\bstr_unit.exe
+```
 
 ## Usage
 
@@ -168,7 +178,6 @@ Examples:
 * Array of array values
 * Array of hash values
 * Array of mixed values (any of the above)
-
 
 ## Hash Values (HV)
 
