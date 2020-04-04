@@ -40,11 +40,16 @@
 #include "CMemLeak.h"
 #endif
 
+#ifdef _WIN64
+#include <Basetsd.h>
+#endif
+
 //////////////////////////////////////////////////////////////////////////////
 // PRIVATE CONSTANTS AND DATA TYPES
 //////////////////////////////////////////////////////////////////////////////
 #define MAX_NUM_BUF 128
 #define BYTEARRAY_DEFAULT_GROWSIZE 256
+
 //////////////////////////////////////////////////////////////////////////////
 // PRIVATE FUNCTION PROTOTYPES
 //////////////////////////////////////////////////////////////////////////////
@@ -833,9 +838,17 @@ void* dtl_sv_to_ptr(const dtl_sv_t *self){
       case DTL_SV_NONE:
          break;
       case DTL_SV_I32:
+#ifdef _WIN64
+         return IntToPtr(self->pAny->val.i32);
+#else
          return (void*) ((long) self->pAny->val.i32);
+#endif
       case DTL_SV_U32:
-         return (void*) ((long) self->pAny->val.u32);
+#ifdef _WIN64
+         return UIntToPtr(self->pAny->val.u32);
+#else
+         return (void*) ((unsigned long) self->pAny->val.u32);
+#endif
       case DTL_SV_I64:
          break;
       case DTL_SV_U64:
