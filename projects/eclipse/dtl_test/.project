@@ -27,17 +27,12 @@
 		<link>
 			<name>cutest</name>
 			<type>2</type>
-			<locationURI>PARENT-3-PROJECT_LOC/cutest</locationURI>
+			<locationURI>PARENT-4-PROJECT_LOC/cutil/cutest</locationURI>
 		</link>
 		<link>
 			<name>inc</name>
 			<type>2</type>
 			<locationURI>PARENT-3-PROJECT_LOC/inc</locationURI>
-		</link>
-		<link>
-			<name>local</name>
-			<type>2</type>
-			<locationURI>PARENT-3-PROJECT_LOC/local</locationURI>
 		</link>
 		<link>
 			<name>src</name>
@@ -58,6 +53,16 @@
 			<name>adt/src</name>
 			<type>2</type>
 			<locationURI>PARENT-4-PROJECT_LOC/adt/src</locationURI>
+		</link>
+		<link>
+			<name>cutil/inc</name>
+			<type>2</type>
+			<locationURI>PARENT-4-PROJECT_LOC/cutil/inc</locationURI>
+		</link>
+		<link>
+			<name>cutil/src</name>
+			<type>2</type>
+			<locationURI>PARENT-4-PROJECT_LOC/cutil/src</locationURI>
 		</link>
 	</linkedResources>
 </projectDescription>
