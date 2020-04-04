@@ -32,7 +32,7 @@ This repo is a submodule of the [cogu/c-apx](https://github.com/cogu/c-apx) (top
 * [cogu/adt](https://github.com/cogu/adt)
 * [cogu/cutil](https://github.com/cogu/cutil)
 
-The unit test project(s) assume that the repos are cloned (separately) into a common directory as seen below.
+The unit test project assumes that repos have been cloned (separately) into a common directory as seen below.
 
 * adt
 * cutil
@@ -75,7 +75,7 @@ It conveniently comes pre-installed with a version of CMake that generates Visua
 mkdir UnitTest && cd UnitTest
 cmake -DUNIT_TEST=ON -DLEAK_CHECK=ON ..
 cmake --build . --config Debug
-Debug\bstr_unit.exe
+Debug\dtl_type_unit.exe
 ```
 
 ## Usage
