@@ -1,5 +1,5 @@
 CMemLeak.txt
 **/Debug/
 **/Release/
-**/UnitTest/
+/build/
 language.settings.xml
