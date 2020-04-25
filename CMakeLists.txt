@@ -16,22 +16,21 @@ if (UNIT_TEST)
     message(STATUS "UNIT_TEST=${UNIT_TEST} (DTL_TYPE)")
 endif()
 
-
 ### Library dtl_type
 set (DTL_TYPE_HEADER_LIST
-    inc/dtl_av.h
-    inc/dtl_dv.h
-    inc/dtl_error.h
-    inc/dtl_hv.h
-    inc/dtl_sv.h
-    inc/dtl_type.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/inc/dtl_av.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/inc/dtl_dv.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/inc/dtl_error.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/inc/dtl_hv.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/inc/dtl_sv.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/inc/dtl_type.h
 )
 
 set (DTL_TYPE_SOURCE_LIST
-    src/dtl_av.c
-    src/dtl_dv.c
-    src/dtl_hv.c
-    src/dtl_sv.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/dtl_av.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/dtl_dv.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/dtl_hv.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/dtl_sv.c
 )
 
 add_library(dtl_type ${DTL_TYPE_SOURCE_LIST} ${DTL_TYPE_HEADER_LIST})
@@ -76,5 +75,10 @@ if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
             target_compile_definitions(dtl_type_unit PRIVATE MEM_LEAK_CHECK)
             target_link_libraries(dtl_type_unit PRIVATE cutil)
         endif()
+
+        enable_testing()
+        add_test(dtl_type_test ${CMAKE_CURRENT_BINARY_DIR}/dtl_type_unit)
+        set_tests_properties(dtl_type_test PROPERTIES PASS_REGULAR_EXPRESSION "OK \\([0-9]+ tests\\)")
+
     endif()
 endif()
