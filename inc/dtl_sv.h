@@ -55,6 +55,7 @@ typedef union dtl_sv_value_tag{
     uint64_t   u64;
     float      flt;
     double     dbl;
+    char       cr;
     adt_str_t  *str;
     dtl_pv_t   ptr;
     dtl_dv_t*  dv;
@@ -83,6 +84,7 @@ typedef enum dtl_sv_type_tag{
    DTL_SV_U64,
    DTL_SV_FLT,
    DTL_SV_DBL,
+   DTL_SV_CHAR,
    DTL_SV_BOOL,
    DTL_SV_STR,
    DTL_SV_PTR,
@@ -114,6 +116,7 @@ dtl_sv_t *dtl_sv_make_u64(uint64_t u64);
 dtl_sv_t *dtl_sv_make_flt(float sf);
 dtl_sv_t *dtl_sv_make_dbl(double df);
 dtl_sv_t *dtl_sv_make_bool(bool bl);
+dtl_sv_t* dtl_sv_make_char(char cr);
 dtl_sv_t *dtl_sv_make_ptr(void *ptr,void (*pDestructor)(void*));
 dtl_sv_t *dtl_sv_make_str(const adt_str_t *str);
 dtl_sv_t *dtl_sv_make_cstr(const char* cstr);
@@ -138,6 +141,7 @@ void dtl_sv_set_u64(dtl_sv_t *self, uint64_t u64);
 void dtl_sv_set_flt(dtl_sv_t *self, float flt);
 void dtl_sv_set_dbl(dtl_sv_t *self, double dbl);
 void dtl_sv_set_bool(dtl_sv_t *self, bool bl);
+void dtl_sv_set_char(dtl_sv_t* self, char cr);
 void dtl_sv_set_ptr(dtl_sv_t *self, void *p, void (*pDestructor)(void*));
 void dtl_sv_set_str(dtl_sv_t *self, const adt_str_t *str);
 void dtl_sv_set_cstr(dtl_sv_t *self, const char* str);
@@ -156,10 +160,11 @@ int64_t dtl_sv_to_i64(const dtl_sv_t *self, bool *ok);
 uint64_t dtl_sv_to_u64(const dtl_sv_t *self, bool *ok);
 float dtl_sv_to_flt(const dtl_sv_t *self, bool *ok);
 double dtl_sv_to_dbl(const dtl_sv_t *self, bool *ok);
-bool dtl_sv_to_bool(const dtl_sv_t *self);
+bool dtl_sv_to_bool(const dtl_sv_t *self, bool* ok);
+char dtl_sv_to_char(const dtl_sv_t* self, bool* ok);
 void* dtl_sv_to_ptr(const dtl_sv_t *self);
-adt_str_t *dtl_sv_to_str(const dtl_sv_t *self);
-const char *dtl_sv_to_cstr(dtl_sv_t *self);
+adt_str_t *dtl_sv_to_str(const dtl_sv_t *self, bool* ok);
+const char *dtl_sv_to_cstr(dtl_sv_t *self, bool* ok);
 dtl_dv_t *dtl_sv_to_dv(const dtl_sv_t *self);
 dtl_sv_t *dtl_sv_to_sv(const dtl_sv_t *self);
 struct dtl_av_tag *dtl_sv_to_av(const dtl_sv_t *self);

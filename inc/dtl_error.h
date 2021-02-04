@@ -40,6 +40,7 @@ typedef int32_t dtl_error_t;
 #define DTL_MEM_ERROR                2
 #define DTL_NOT_IMPLEMENTED_ERROR    3
 #define DTL_TYPE_ERROR               4
+#define DTL_CONVERSION_ERROR         5
 
 //////////////////////////////////////////////////////////////////////////////
 // PUBLIC FUNCTION PROTOTYPES

@@ -4,7 +4,7 @@
 * \date      2013-03-07
 * \brief     DTL Scalar
 *
-* Copyright (c) 2013-2019 Conny Gustafsson
+* Copyright (c) 2013-2021 Conny Gustafsson
 * Permission is hereby granted, free of charge, to any person obtaining a copy of
 * this software and associated documentation files (the "Software"), to deal in
 * the Software without restriction, including without limitation the rights to
@@ -32,6 +32,7 @@
 #include <string.h>
 #include <ctype.h>
 #include <stdio.h>
+#include <stddef.h>
 #include "dtl_dv.h"
 #include "dtl_sv.h"
 #include "dtl_av.h"
@@ -49,13 +50,15 @@
 //////////////////////////////////////////////////////////////////////////////
 #define MAX_NUM_BUF 128
 #define BYTEARRAY_DEFAULT_GROWSIZE 256
+#define DTL_CHAR_MIN -128
+#define DTL_CHAR_MAX 127
 
 //////////////////////////////////////////////////////////////////////////////
 // PRIVATE FUNCTION PROTOTYPES
 //////////////////////////////////////////////////////////////////////////////
 static void dtl_sv_set_type(dtl_sv_t *self,dtl_sv_type_id type);
 static void dtl_sv_ztrim(char *str);
-static void dtl_sv_to_string_internal(const dtl_sv_t *self, adt_str_t* str);
+static void dtl_sv_to_string_internal(const dtl_sv_t *self, adt_str_t* str, bool* ok);
 
 //////////////////////////////////////////////////////////////////////////////
 // PUBLIC VARIABLES
@@ -200,6 +203,15 @@ dtl_sv_t *dtl_sv_make_bool(bool bl){
    dtl_sv_t *self = dtl_sv_new();
    if(self){
       dtl_sv_set_bool(self,bl);
+   }
+   return self;
+}
+
+dtl_sv_t* dtl_sv_make_char(char cr)
+{
+   dtl_sv_t* self = dtl_sv_new();
+   if (self) {
+      dtl_sv_set_char(self, cr);
    }
    return self;
 }
@@ -360,6 +372,15 @@ void dtl_sv_set_bool(dtl_sv_t *self, bool bl){
    }
 }
 
+void dtl_sv_set_char(dtl_sv_t* self, char cr)
+{
+   if (self)
+   {
+      dtl_sv_set_type(self, DTL_SV_CHAR);
+      self->pAny->val.cr = cr;
+   }
+}
+
 void dtl_sv_set_ptr(dtl_sv_t *self, void *p, void (*pDestructor)(void*)){
    if(self){
       if(dtl_sv_type(self)==DTL_SV_DV){
@@ -468,27 +489,46 @@ int32_t dtl_sv_to_i32(const dtl_sv_t *self, bool *ok)
          success = true;
          break;
       case DTL_SV_U32:
-         retval = (int32_t) self->pAny->val.u32;
-         success = true;
+         if (self->pAny->val.u32 <= INT32_MAX)
+         {
+            retval = (int32_t)self->pAny->val.u32;
+            success = true;
+         }
          break;
       case DTL_SV_I64:
-         retval = (int32_t) self->pAny->val.i64;
-         success = true;
+         if ( (self->pAny->val.i64 >= INT32_MIN) && (self->pAny->val.i64 <= INT32_MAX))
+         {
+            retval = (int32_t)self->pAny->val.i64;
+            success = true;
+         }
          break;
       case DTL_SV_U64:
-         retval = (int32_t) self->pAny->val.u64;
-         success = true;
+         if (self->pAny->val.i64 <= INT32_MAX)
+         {
+            retval = (int32_t)self->pAny->val.i64;
+            success = true;
+         }
          break;
       case DTL_SV_FLT:
-         retval = (int32_t) self->pAny->val.flt;
-         success = true;
+         if ((self->pAny->val.flt >= (float)INT32_MIN) && (self->pAny->val.flt <= (float)INT32_MAX))
+         {
+            retval = (int32_t)self->pAny->val.flt;
+            success = true;
+         }
          break;
       case DTL_SV_DBL:
-         retval = (int32_t) self->pAny->val.dbl;
-         success = true;
+         if ((self->pAny->val.dbl >= (double)INT32_MIN) && (self->pAny->val.dbl <= (double)INT32_MAX))
+         {
+            retval = (int32_t)self->pAny->val.dbl;
+            success = true;
+         }
          break;
       case DTL_SV_BOOL:
          retval = (int32_t) self->pAny->val.bl;
+         success = true;
+         break;
+      case DTL_SV_CHAR:
+         retval = (int32_t)self->pAny->val.cr;
          success = true;
          break;
       case DTL_SV_STR:
@@ -513,38 +553,57 @@ uint32_t dtl_sv_to_u32(const dtl_sv_t *self, bool *ok)
 {
    bool success = false;
    uint32_t retval = 0u;
-
    if(self)
    {
       switch(dtl_sv_type(self)){
       case DTL_SV_NONE:
          break;
       case DTL_SV_I32:
-         retval = (uint32_t) self->pAny->val.i32;
-         success = true;
+         if (self->pAny->val.i32 >= 0)
+         {
+            retval = (uint32_t)self->pAny->val.i32;
+            success = true;
+         }
          break;
       case DTL_SV_U32:
          retval =  self->pAny->val.u32;
          success = true;
          break;
       case DTL_SV_I64:
-         retval = (uint32_t) self->pAny->val.i64;
-         success = true;
+         if ( (self->pAny->val.i64 >= 0) && (self->pAny->val.i64 <= (int64_t)UINT32_MAX))
+         {
+            retval = (uint32_t)self->pAny->val.i64;
+            success = true;
+         }
          break;
       case DTL_SV_U64:
-         retval = (uint32_t) self->pAny->val.u64;
+         if (self->pAny->val.u64 <= (uint64_t)UINT32_MAX)
+         {
+            retval = (uint32_t)self->pAny->val.u64;
+            success = true;
+         }
          success = true;
          break;
       case DTL_SV_FLT:
-         retval = (uint32_t) self->pAny->val.flt;
-         success = true;
+         if (self->pAny->val.flt >= 0.0)
+         {
+            retval = (uint32_t)self->pAny->val.flt;
+            success = true;
+         }
          break;
       case DTL_SV_DBL:
-         retval = (uint32_t) self->pAny->val.dbl;
-         success = true;
+         if (self->pAny->val.dbl >= 0.0)
+         {
+            retval = (uint32_t)self->pAny->val.dbl;
+            success = true;
+         }
          break;
       case DTL_SV_BOOL:
          retval = (uint32_t) self->pAny->val.bl;
+         success = true;
+         break;
+      case DTL_SV_CHAR:
+         retval = (uint32_t)self->pAny->val.cr;
          success = true;
          break;
       case DTL_SV_STR:
@@ -577,7 +636,7 @@ int64_t dtl_sv_to_i64(const dtl_sv_t *self, bool *ok)
       case DTL_SV_NONE:
          break;
       case DTL_SV_I32:
-         retval = (int64_t) self->pAny->val.i32;
+         retval = (int32_t)self->pAny->val.i32;
          success = true;
          break;
       case DTL_SV_U32:
@@ -585,12 +644,15 @@ int64_t dtl_sv_to_i64(const dtl_sv_t *self, bool *ok)
          success = true;
          break;
       case DTL_SV_I64:
-         retval = self->pAny->val.i64;
+         retval = (int64_t)self->pAny->val.i64;
          success = true;
          break;
       case DTL_SV_U64:
-         retval = (int64_t) self->pAny->val.u64;
-         success = true;
+         if (self->pAny->val.u64 <= INT64_MAX)
+         {
+            retval = (int64_t)self->pAny->val.i64;
+            success = true;
+         }
          break;
      case DTL_SV_FLT:
          retval = (int64_t) self->pAny->val.flt;
@@ -604,6 +666,10 @@ int64_t dtl_sv_to_i64(const dtl_sv_t *self, bool *ok)
          retval = (int64_t) self->pAny->val.bl;
          success = true;
          break;
+     case DTL_SV_CHAR:
+        retval = (int64_t)self->pAny->val.cr;
+        success = true;
+        break;
       case DTL_SV_STR:
          break;
       case DTL_SV_PTR:
@@ -634,31 +700,47 @@ uint64_t dtl_sv_to_u64(const dtl_sv_t *self, bool *ok)
       case DTL_SV_NONE:
          break;
       case DTL_SV_I32:
-         retval = (uint64_t) self->pAny->val.i32;
-         success = true;
-         break;
+         if (self->pAny->val.i32 >= 0)
+         {
+            retval = (uint64_t)self->pAny->val.i32;
+            success = true;
+         }
+         break;         break;
       case DTL_SV_U32:
          retval = (uint64_t) self->pAny->val.u32;
          success = true;
          break;
       case DTL_SV_I64:
-         retval = (uint64_t) self->pAny->val.i64;
-         success = true;
-         break;
+         if (self->pAny->val.i32 >= 0)
+         {
+            retval = (uint64_t)self->pAny->val.i64;
+            success = true;
+         }
+         break;         break;
       case DTL_SV_U64:
          retval = self->pAny->val.u64;
          success = true;
          break;
       case DTL_SV_FLT:
-         retval = (uint64_t) self->pAny->val.flt;
-         success = true;
+         if (self->pAny->val.flt >= 0.0)
+         {
+            retval = (uint64_t)self->pAny->val.flt;
+            success = true;
+         }
          break;
       case DTL_SV_DBL:
-         retval = (uint64_t) self->pAny->val.dbl;
-         success = true;
+         if (self->pAny->val.dbl >= 0.0)
+         {
+            retval = (uint64_t)self->pAny->val.dbl;
+            success = true;
+         }
          break;
       case DTL_SV_BOOL:
          retval = (uint64_t) self->pAny->val.bl;
+         success = true;
+         break;
+      case DTL_SV_CHAR:
+         retval = (uint64_t)self->pAny->val.cr;
          success = true;
          break;
       case DTL_SV_STR:
@@ -720,6 +802,10 @@ float dtl_sv_to_flt(const dtl_sv_t *self, bool *ok)
          retval = (float) self->pAny->val.bl;
          success = true;
          break;
+      case DTL_SV_CHAR:
+         retval = (float)self->pAny->val.cr;
+         success = true;
+         break;
       case DTL_SV_STR:
          break;
       case DTL_SV_PTR:
@@ -778,6 +864,10 @@ double dtl_sv_to_dbl(const dtl_sv_t *self, bool *ok)
          retval = (double) self->pAny->val.bl;
          success = true;
          break;
+      case DTL_SV_CHAR:
+         retval = (double)self->pAny->val.cr;
+         success = true;
+         break;
       case DTL_SV_STR:
          break;
       case DTL_SV_PTR:
@@ -797,37 +887,140 @@ double dtl_sv_to_dbl(const dtl_sv_t *self, bool *ok)
    return retval;
 }
 
-bool dtl_sv_to_bool(const dtl_sv_t *self){
-   if(self){
+char dtl_sv_to_char(const dtl_sv_t *self, bool *ok){
+   if( self != NULL ) {
+      bool success = false;
+      char retval = 0;
+      if (ok != NULL) *ok = true;
       switch(dtl_sv_type(self)){
       case DTL_SV_NONE:
+         if (ok != NULL) *ok = false;
          break;
       case DTL_SV_I32:
-         return (bool) self->pAny->val.i32;
+         if ((self->pAny->val.i32 >= DTL_CHAR_MIN) && (self->pAny->val.i32 <= DTL_CHAR_MAX))
+         {
+            retval = (char)self->pAny->val.i32;
+            success = true;
+         }
+         break;
       case DTL_SV_U32:
-         return (bool) self->pAny->val.u32;
+         if (self->pAny->val.u32 <= DTL_CHAR_MAX)
+         {
+            retval = (char)self->pAny->val.u32;
+            success = true;
+         }
+         break;
       case DTL_SV_I64:
-         return (bool) self->pAny->val.i64;
+         if ((self->pAny->val.i64 >= DTL_CHAR_MIN) && (self->pAny->val.i64 <= DTL_CHAR_MAX))
+         {
+            retval = (char)self->pAny->val.i64;
+            success = true;
+         }
+         break;
       case DTL_SV_U64:
-         return (bool) self->pAny->val.u64;
+         if (self->pAny->val.u64 <= DTL_CHAR_MAX)
+         {
+            retval = (char)self->pAny->val.u64;
+            success = true;
+         }
+         break;
+      case DTL_SV_CHAR:
+         retval = self->pAny->val.cr;
+         success = true;
+         break;
       case DTL_SV_FLT:
-         return (bool) self->pAny->val.flt;
+         if ((self->pAny->val.flt >= -128.0) && (self->pAny->val.i64 <= 127.0))
+         {
+            retval = (char)self->pAny->val.flt;
+            success = true;
+         }
+         break;
       case DTL_SV_DBL:
-         return (bool) self->pAny->val.dbl;
+         if ((self->pAny->val.dbl >= -128.0) && (self->pAny->val.dbl <= 127.0))
+         {
+            retval = (char)self->pAny->val.dbl;
+            success = true;
+         }
+         break;
       case DTL_SV_BOOL:
-         return self->pAny->val.bl;
+         retval = self->pAny->val.bl? 1 : 0;
+         break;
+
       case DTL_SV_STR:
-         if (adt_str_equal_cstr(self->pAny->val.str, "true") ) return true;
          break;
       case DTL_SV_PTR:
+         if (ok != NULL) *ok = false;
          break;
       case DTL_SV_DV:
+         if (ok != NULL) *ok = false;
          break;
       case DTL_SV_BYTES:
+         if (ok != NULL) *ok = false;
          break;
       case DTL_SV_BYTEARRAY:
+         if (ok != NULL) *ok = false;
          break;
       }
+      if (ok != 0)
+      {
+         *ok = success;
+      }
+      return retval;
+   }
+   return false;
+}
+
+bool dtl_sv_to_bool(const dtl_sv_t* self, bool* ok) {
+   if (self != NULL){
+      if (ok != NULL) *ok = true;
+      bool retval = false;
+      switch (dtl_sv_type(self)) {
+      case DTL_SV_NONE:
+         if (ok != NULL) *ok = false;
+         break;
+      case DTL_SV_I32:
+         retval = (bool)self->pAny->val.i32;
+         break;
+      case DTL_SV_U32:
+         retval = (bool)self->pAny->val.u32;
+         break;
+      case DTL_SV_I64:
+         retval = (bool)self->pAny->val.i64;
+         break;
+      case DTL_SV_U64:
+         retval = (bool)self->pAny->val.u64;
+         break;
+      case DTL_SV_FLT:
+         retval = (bool)self->pAny->val.flt;
+         break;
+      case DTL_SV_DBL:
+         retval = (bool)self->pAny->val.dbl;
+         break;
+      case DTL_SV_BOOL:
+         retval = self->pAny->val.bl;
+         break;
+      case DTL_SV_STR:
+         if (adt_str_equal_cstr(self->pAny->val.str, "true") || adt_str_equal_cstr(self->pAny->val.str, "TRUE")) {
+            retval = true;
+         }
+         else if (!adt_str_equal_cstr(self->pAny->val.str, "false") && !adt_str_equal_cstr(self->pAny->val.str, "FALSE")) {
+            if (ok != NULL) *ok = false;
+         }
+         break;
+      case DTL_SV_PTR:
+         if (ok != NULL) *ok = false;
+         break;
+      case DTL_SV_DV:
+         if (ok != NULL) *ok = false;
+         break;
+      case DTL_SV_BYTES:
+         if (ok != NULL) *ok = false;
+         break;
+      case DTL_SV_BYTEARRAY:
+         if (ok != NULL) *ok = false;
+         break;
+      }
+      return retval;
    }
    return false;
 }
@@ -877,9 +1070,10 @@ void* dtl_sv_to_ptr(const dtl_sv_t *self){
    return (void*)0;
 }
 
-const char* dtl_sv_to_cstr(dtl_sv_t *self){
-   if(self)
+const char* dtl_sv_to_cstr(dtl_sv_t *self, bool* ok){
+   if(self != NULL)
    {
+      if (ok != NULL) *ok = false;
       switch(dtl_sv_type(self)){
       case DTL_SV_NONE:
          break;
@@ -889,7 +1083,8 @@ const char* dtl_sv_to_cstr(dtl_sv_t *self){
       case DTL_SV_U64:
       case DTL_SV_FLT:
       case DTL_SV_DBL:
-         if (self->pAny->tmpStr == 0)
+      case DTL_SV_CHAR:
+         if (self->pAny->tmpStr == NULL)
          {
             self->pAny->tmpStr = adt_str_new();
          }
@@ -899,13 +1094,15 @@ const char* dtl_sv_to_cstr(dtl_sv_t *self){
          }
          if (self->pAny->tmpStr != 0)
          {
-            dtl_sv_to_string_internal(self, self->pAny->tmpStr);
+            dtl_sv_to_string_internal(self, self->pAny->tmpStr, ok);
             return adt_str_cstr(self->pAny->tmpStr);
          }
          break;
       case DTL_SV_BOOL:
+         if (ok != NULL) *ok = true;
          return self->pAny->val.bl? "true" : "false";
       case DTL_SV_STR:
+         if (ok != NULL) *ok = true;
          return adt_str_cstr(self->pAny->val.str);
       case DTL_SV_PTR:
          break;
@@ -917,10 +1114,10 @@ const char* dtl_sv_to_cstr(dtl_sv_t *self){
          break;
       }
    }
-   return (const char*)0;
+   return NULL;
 }
 
-adt_str_t* dtl_sv_to_str(const dtl_sv_t *self)
+adt_str_t* dtl_sv_to_str(const dtl_sv_t *self, bool* ok)
 {
    adt_str_t *str = (adt_str_t*) 0;
    if(self != 0)
@@ -928,7 +1125,7 @@ adt_str_t* dtl_sv_to_str(const dtl_sv_t *self)
       str = adt_str_new();
       if (str != 0)
       {
-         dtl_sv_to_string_internal(self, str);
+         dtl_sv_to_string_internal(self, str, ok);
       }
    }
    return str;
@@ -1220,43 +1417,52 @@ static void dtl_sv_ztrim(char *str)
    }
 }
 
-static void dtl_sv_to_string_internal(const dtl_sv_t *self, adt_str_t* str)
+static void dtl_sv_to_string_internal(const dtl_sv_t* self, adt_str_t* str, bool* ok)
 {
    char numBuf[MAX_NUM_BUF];
    bool isNum = false;
    switch(dtl_sv_type(self))
    {
    case DTL_SV_NONE:
+      if (ok != NULL) *ok = true;
       adt_str_append_cstr(str,"(undefined)");
       break;
    case DTL_SV_I32:
+   case DTL_SV_CHAR:
+      if (ok != NULL) *ok = true;
       sprintf(numBuf,"%d", (int) dtl_sv_to_i32(self, NULL));
       isNum = true;
       break;
    case DTL_SV_U32:
+      if (ok != NULL) *ok = true;
       sprintf(numBuf,"%u", (unsigned int) dtl_sv_to_u32(self, NULL));
       isNum = true;
       break;
    case DTL_SV_I64:
+      if (ok != NULL) *ok = true;
       sprintf(numBuf,"%lld", (long long int) dtl_sv_to_i64(self, NULL));
       isNum = true;
       break;
    case DTL_SV_U64:
+      if (ok != NULL) *ok = true;
       sprintf(numBuf,"%llu", (long long unsigned int) dtl_sv_to_u64(self, NULL));
       isNum = true;
       break;
    case DTL_SV_FLT:
+      if (ok != NULL) *ok = true;
       sprintf(numBuf,"%f", (double) dtl_sv_to_flt(self, NULL));
       isNum = true;
       dtl_sv_ztrim(numBuf);
       break;
    case DTL_SV_DBL:
+      if (ok != NULL) *ok = true;
       sprintf(numBuf,"%f", dtl_sv_to_dbl(self, NULL));
       isNum = true;
       dtl_sv_ztrim(numBuf);
       break;
    case DTL_SV_BOOL:
-      if(dtl_sv_to_bool(self))
+      if (ok != NULL) *ok = true;
+      if(dtl_sv_to_bool(self, NULL))
       {
          adt_str_set_cstr(str, "true");
       }
@@ -1266,17 +1472,22 @@ static void dtl_sv_to_string_internal(const dtl_sv_t *self, adt_str_t* str)
       }
       break;
    case DTL_SV_STR:
+      if (ok != NULL) *ok = true;
       adt_str_set(str, self->pAny->val.str);
       break;
    case DTL_SV_PTR:
+      if (ok != NULL) *ok = true;
       sprintf(numBuf,"%p", dtl_sv_to_ptr(self));
       isNum = true;
       break;
    case DTL_SV_DV:
+      //No conversion available
       break;
    case DTL_SV_BYTES:
+      //No conversion available
       break;
    case DTL_SV_BYTEARRAY:
+      //No conversion available
       break;
    }
    if(isNum)

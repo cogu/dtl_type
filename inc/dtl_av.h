@@ -73,6 +73,7 @@ void dtl_av_extend(dtl_av_t *self, int32_t s32Len);
 void dtl_av_fill(dtl_av_t *self, int32_t s32Len);
 void dtl_av_clear(dtl_av_t *self);
 int32_t dtl_av_length(const dtl_av_t *self);
+bool dtl_av_is_empty(const dtl_av_t* self);
 bool dtl_av_exists(const dtl_av_t *self, int32_t s32Index);
 dtl_error_t dtl_av_sort(dtl_av_t *self, dtl_key_func_t *key, bool reverse);
 
