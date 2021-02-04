@@ -59,7 +59,10 @@ The [cogu/dtl_json](https://github.com/cogu/dtl_json) project provides JSON seri
 
 First clone this repo and its dependencies into a common directory (such as ~/repo) as seen above. Alternatively the repos can be submodules of a top-level repo (as seen in [cogu/c-apx](https://github.com/cogu/c-apx)).
 
-### Running unit tests (Linux)
+For Windows, use a "Native tools command prompt" from your Visual Studio installation. It comes with a cmake binary that
+by default chooses the appropriate compiler version.
+
+### Running unit tests (Linux and Windows)
 
 Configure:
 
@@ -77,30 +80,6 @@ Run test cases:
 
 ```cmd
 cd build && ctest
-```
-
-### Running unit tests (Windows with Visual Studio)
-
-Use a command prompt provided by your Visual Studio installation.
-For example, I use "x64 Native Tools Command Prompt for VS2019" which is found on the start menu.
-It conveniently comes with CMake pre-installed which generates Visual Studio projects by default.
-
-Configure:
-
-```cmd
-cmake -S . -B VisualStudio -DUNIT_TEST=ON
-```
-
-Build:
-
-```cmd
-cmake --build VisualStudio --config Debug --target dtl_type_unit
-```
-
-Run test cases:
-
-```cmd
-cd VisualStudio && ctest
 ```
 
 ## Usage
