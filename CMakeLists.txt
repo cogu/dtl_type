@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.14)
 
-project(dtl_type LANGUAGES C VERSION 0.1.1)
+project(dtl_type LANGUAGES C VERSION 0.2.0)
 
 if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
     include(../adt/cmake/BuildTypes.cmake)
