@@ -25,7 +25,7 @@ typedef struct dtl_dv_tag{
 } dtl_dv_t;
 
 typedef enum dtl_dv_type_id{
-	DTL_DV_INVALID=0,
+	DTL_DV_INVALID=0, //TODO: THIS SHOULD BE REMOVED IN A FUTURE VERSION. USE DTL_DV_NULL INSTEAD.
 	DTL_DV_NULL,
 	DTL_DV_SCALAR,
 	DTL_DV_ARRAY,

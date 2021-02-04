@@ -140,6 +140,7 @@ static void test_dtl_av_sort_i32(CuTest* tc)
 
 static void test_dtl_av_sort_strings(CuTest* tc)
 {
+   bool ok = false;
    dtl_av_t *av = dtl_av_new();
    CuAssertPtrNotNull(tc, av);
 
@@ -150,11 +151,16 @@ static void test_dtl_av_sort_strings(CuTest* tc)
    dtl_av_push(av, (dtl_dv_t*) dtl_sv_make_cstr("pineapple"), false);
    CuAssertIntEquals(tc, 5, dtl_av_length(av));
    CuAssertIntEquals(tc, DTL_NO_ERROR, dtl_av_sort(av, NULL, false));
-   CuAssertStrEquals(tc, "apple", dtl_sv_to_cstr((dtl_sv_t*) dtl_av_value(av, 0)));
-   CuAssertStrEquals(tc, "pear", dtl_sv_to_cstr((dtl_sv_t*) dtl_av_value(av, 1)));
-   CuAssertStrEquals(tc, "pineapple", dtl_sv_to_cstr((dtl_sv_t*) dtl_av_value(av, 2)));
-   CuAssertStrEquals(tc, "raspberry", dtl_sv_to_cstr((dtl_sv_t*) dtl_av_value(av, 3)));
-   CuAssertStrEquals(tc, "strawberry", dtl_sv_to_cstr((dtl_sv_t*) dtl_av_value(av, 4)));
+   CuAssertStrEquals(tc, "apple", dtl_sv_to_cstr((dtl_sv_t*) dtl_av_value(av, 0), &ok));
+   CuAssertTrue(tc, ok);
+   CuAssertStrEquals(tc, "pear", dtl_sv_to_cstr((dtl_sv_t*) dtl_av_value(av, 1), &ok));
+   CuAssertTrue(tc, ok);
+   CuAssertStrEquals(tc, "pineapple", dtl_sv_to_cstr((dtl_sv_t*) dtl_av_value(av, 2), &ok));
+   CuAssertTrue(tc, ok);
+   CuAssertStrEquals(tc, "raspberry", dtl_sv_to_cstr((dtl_sv_t*) dtl_av_value(av, 3), &ok));
+   CuAssertTrue(tc, ok);
+   CuAssertStrEquals(tc, "strawberry", dtl_sv_to_cstr((dtl_sv_t*) dtl_av_value(av, 4), &ok));
+   CuAssertTrue(tc, ok);
 
    dtl_dec_ref(av);
 }

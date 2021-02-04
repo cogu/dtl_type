@@ -41,7 +41,7 @@
 //////////////////////////////////////////////////////////////////////////////
 // PRIVATE FUNCTION PROTOTYPES
 //////////////////////////////////////////////////////////////////////////////
-static adt_error_t dtl_av_insertion_sort(dtl_av_t *self, bool reverse);
+static dtl_error_t dtl_av_insertion_sort(dtl_av_t *self, bool reverse);
 
 
 //////////////////////////////////////////////////////////////////////////////
@@ -182,6 +182,15 @@ int32_t dtl_av_length(const dtl_av_t *self){
    }
    return -1;
 }
+bool dtl_av_is_empty(const dtl_av_t* self)
+{
+   if (self)
+   {
+      return adt_ary_is_empty(self->pAny);
+   }
+   return false;
+}
+
 bool dtl_av_exists(const dtl_av_t *self, int32_t s32Index){
    if(self){
       return adt_ary_exists(self->pAny,s32Index);
@@ -204,7 +213,7 @@ dtl_error_t dtl_av_sort(dtl_av_t *self, dtl_key_func_t *key, bool reverse)
 //////////////////////////////////////////////////////////////////////////////
 // PRIVATE FUNCTIONS
 //////////////////////////////////////////////////////////////////////////////
-static adt_error_t dtl_av_insertion_sort(dtl_av_t *self, bool reverse)
+static dtl_error_t dtl_av_insertion_sort(dtl_av_t *self, bool reverse)
 {
    int32_t arrayLen = self->pAny->s32CurLen;
    if (arrayLen > 1)

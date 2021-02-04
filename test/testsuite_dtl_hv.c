@@ -108,6 +108,7 @@ static void test_dtl_hv_keys_sorted(CuTest* tc)
 {
    dtl_hv_t *hv = dtl_hv_new();
    dtl_av_t *keys = 0;
+   bool ok = false;
    CuAssertPtrNotNull(tc, hv);
 
    dtl_hv_set_cstr(hv,"Illinois",(dtl_dv_t*) dtl_sv_make_dbl(3.85), false);
@@ -122,12 +123,18 @@ static void test_dtl_hv_keys_sorted(CuTest* tc)
    CuAssertPtrNotNull(tc, keys);
    CuAssertIntEquals(tc, 6, dtl_av_length(keys));
    CuAssertIntEquals(tc, DTL_NO_ERROR, dtl_av_sort(keys, NULL, false));
-   CuAssertStrEquals(tc, "California", dtl_sv_to_cstr((dtl_sv_t*) dtl_av_value(keys, 0)));
-   CuAssertStrEquals(tc, "Florida", dtl_sv_to_cstr((dtl_sv_t*) dtl_av_value(keys, 1)));
-   CuAssertStrEquals(tc, "Illinois", dtl_sv_to_cstr((dtl_sv_t*) dtl_av_value(keys, 2)));
-   CuAssertStrEquals(tc, "Ohio", dtl_sv_to_cstr((dtl_sv_t*) dtl_av_value(keys, 3)));
-   CuAssertStrEquals(tc, "Pennsylvania", dtl_sv_to_cstr((dtl_sv_t*) dtl_av_value(keys, 4)));
-   CuAssertStrEquals(tc, "Texas", dtl_sv_to_cstr((dtl_sv_t*) dtl_av_value(keys, 5)));
+   CuAssertStrEquals(tc, "California", dtl_sv_to_cstr((dtl_sv_t*) dtl_av_value(keys, 0), &ok));
+   CuAssertTrue(tc, ok);
+   CuAssertStrEquals(tc, "Florida", dtl_sv_to_cstr((dtl_sv_t*) dtl_av_value(keys, 1), &ok));
+   CuAssertTrue(tc, ok);
+   CuAssertStrEquals(tc, "Illinois", dtl_sv_to_cstr((dtl_sv_t*) dtl_av_value(keys, 2), &ok));
+   CuAssertTrue(tc, ok);
+   CuAssertStrEquals(tc, "Ohio", dtl_sv_to_cstr((dtl_sv_t*) dtl_av_value(keys, 3), &ok));
+   CuAssertTrue(tc, ok);
+   CuAssertStrEquals(tc, "Pennsylvania", dtl_sv_to_cstr((dtl_sv_t*) dtl_av_value(keys, 4), &ok));
+   CuAssertTrue(tc, ok);
+   CuAssertStrEquals(tc, "Texas", dtl_sv_to_cstr((dtl_sv_t*) dtl_av_value(keys, 5), &ok));
+   CuAssertTrue(tc, ok);
 
    dtl_dec_ref(keys);
    dtl_dec_ref(hv);
@@ -137,6 +144,7 @@ static void test_dtl_hv_iter(CuTest* tc)
 {
    dtl_hv_t *hv = dtl_hv_new();
    dtl_dv_t *dv;
+   bool ok = false;
    const char *key;
 
    CuAssertPtrNotNull(tc, hv);
