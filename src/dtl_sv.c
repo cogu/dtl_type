@@ -996,6 +996,9 @@ bool dtl_sv_to_bool(const dtl_sv_t* self, bool* ok) {
       case DTL_SV_DBL:
          retval = (bool)self->pAny->val.dbl;
          break;
+      case DTL_SV_CHAR:
+         retval = self->pAny->val.cr == 0? false : true;
+         break;
       case DTL_SV_BOOL:
          retval = self->pAny->val.bl;
          break;
@@ -1049,6 +1052,8 @@ void* dtl_sv_to_ptr(const dtl_sv_t *self){
       case DTL_SV_FLT:
          break;
       case DTL_SV_DBL:
+         break;
+      case DTL_SV_CHAR:
          break;
       case DTL_SV_BOOL:
          break;
