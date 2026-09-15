@@ -261,7 +261,7 @@ dtl_sv_type_id dtl_sv_type(const dtl_sv_t *self);
 /**
  * \brief Returns the underlying dynamic value type ID if scalar wraps a dv.
  * \param self Pointer to scalar value.
- * \return Dynamic value type ID, or DTL_DV_INVALID if self is not wrapping a dv.
+ * \return Dynamic value type ID, or DTL_DV_NULL if self is not wrapping a dv.
  */
 dtl_dv_type_id dtl_sv_dv_type(const dtl_sv_t *self);
 

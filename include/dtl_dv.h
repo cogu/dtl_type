@@ -42,8 +42,7 @@ typedef struct dtl_dv_tag {
  * \brief Type identifier for dynamic values.
  */
 typedef enum dtl_dv_type_id {
-   DTL_DV_INVALID = 0,
-   DTL_DV_NULL,
+   DTL_DV_NULL = 0,
    DTL_DV_SCALAR,
    DTL_DV_ARRAY,
    DTL_DV_HASH,
@@ -92,7 +91,7 @@ void dtl_dv_dec_ref(dtl_dv_t *dv);
  * \brief Gets the concrete type ID of a dynamic value.
  *
  * \param dv Pointer to dynamic value.
- * \return Type ID, or DTL_DV_INVALID if dv is NULL.
+ * \return Type ID, or DTL_DV_NULL if dv is NULL.
  */
 dtl_dv_type_id dtl_dv_type(const dtl_dv_t *dv);
 
