@@ -1,45 +1,54 @@
 name: "unit tests"
 
-# Controls when the action will run. Triggers the workflow on push or pull request
-# events but only for the master branch
 on:
   push:
-    branches: [ master ]
   pull_request:
-    branches: [ master ]
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
   build:
-    # The type of runner that the job will run on
+    name: build (${{ matrix.name }})
     runs-on: ubuntu-latest
-    # Steps represent a sequence of tasks that will be executed as part of the job
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: GCC
+            cc: gcc
+            cxx: g++
+          - name: Clang
+            cc: clang
+            cxx: clang++
+    env:
+      CC: ${{ matrix.cc }}
+      CXX: ${{ matrix.cxx }}
+
     steps:
-    # Git checkout
     - name: checkout adt
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
       with:
         repository: cogu/adt
+        ref: v0.3.7
         path: adt
+
     - name: checkout cutil
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
       with:
         repository: cogu/cutil
         path: cutil
+
     - name: checkout dtl_type
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
       with:
-        repository: cogu/dtl_type
         path: main
-    # Build with CMake
+
     - name: configure
       run: cmake -S . -B build -DUNIT_TEST=ON
       working-directory: main
+
     - name: build
       run: cmake --build build --target dtl_type_unit
       working-directory: main
-    # Run unit test suite
+
     - name: test
-      run: cd build && ctest
+      run: ctest --test-dir build --output-on-failure
       working-directory: main
