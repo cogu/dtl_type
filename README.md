@@ -108,13 +108,14 @@ ctest --test-dir build-test --output-on-failure
 
 ## Dynamic Value (DV)
 
-This is the base class which all other value types inherits from. (This is a pseudo-statement since C have neither classes or inheritance-)
+This is the polymorphic base type that all other dynamic value types derive from. (In C, this is achieved using a common header structure `dtl_dv_t` and runtime type tags.)
 
 A dynamic value can be any of the following types:
 
-* Scalar Value (SV)
-* Array Value (AV)
-* Hash Value (HV)
+* **Null Value (`dtl_dv_null()`)**: An explicit null object (`DTL_DV_NULL`).
+* **Scalar Value (`dtl_sv_t`)**: A single value variant (numbers, booleans, strings, bytes, pointers).
+* **Array Value (`dtl_av_t`)**: An ordered, growable collection of dynamic values.
+* **Hash Value (`dtl_hv_t`)**: A string-keyed lookup table of dynamic values.
 
 ![Class Hierarchy](_static/dtl_class_hierarchy.png)
 
@@ -122,13 +123,16 @@ A dynamic value can be any of the following types:
 
 A scalar contains a single unit of data.
 
-Example of scalar types:
+Supported scalar types:
 
-* Integer
-* Double
-* String
-* Boolean
-* NoneType (this name is actually borrowed from Python)
+* **None**: Uninitialized / empty scalar (`dtl_sv_none()`, concept borrowed from Python's `NoneType`)
+* **Integers**: Signed and unsigned 32-bit and 64-bit integers (`i32`, `u32`, `i64`, `u64`)
+* **Floating-Point**: Single-precision `float` and double-precision `double`
+* **Boolean**: `true` or `false`
+* **String**: Managed dynamic strings (`adt_str_t`)
+* **Bytes & Byte Arrays**: Immutable byte sequences (`adt_bytes_t`) and growable byte buffers (`adt_bytearray_t`)
+* **Pointer**: Managed generic pointers with optional destructor callbacks
+* **Dynamic Value**: Wrappers for nested dynamic values (`dtl_dv_t`)
 
 ## Array Values (AV)
 

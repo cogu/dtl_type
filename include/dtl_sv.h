@@ -29,8 +29,8 @@ extern "C" {
 //////////////////////////////////////////////////////////////////////////////
 // PUBLIC CONSTANTS AND DATA TYPES
 //////////////////////////////////////////////////////////////////////////////
-#define DTL_SV_TYPE_MASK      0xF0u
-#define DTL_SV_TYPE_SHIFT     4u
+#define DTL_SV_TYPE_MASK      0xFF00u
+#define DTL_SV_TYPE_SHIFT     8u
 
 /**
  * \brief Custom pointer wrapper with destructor callback.
