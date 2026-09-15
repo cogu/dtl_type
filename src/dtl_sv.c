@@ -17,7 +17,7 @@
 #include <string.h>
 #include <ctype.h>
 #include <stdio.h>
-#include <stddef.h>
+#include <stdint.h>
 #include "dtl_dv.h"
 #include "dtl_sv.h"
 #include "dtl_av.h"
@@ -26,15 +26,10 @@
 #include "CMemLeak.h"
 #endif
 
-#ifdef _WIN64
-#include <Basetsd.h>
-#endif
-
 //////////////////////////////////////////////////////////////////////////////
 // PRIVATE CONSTANTS AND DATA TYPES
 //////////////////////////////////////////////////////////////////////////////
 #define MAX_NUM_BUF 128
-#define BYTEARRAY_DEFAULT_GROWSIZE 256
 #define DTL_CHAR_MIN (-128)
 #define DTL_CHAR_MAX 127
 
@@ -1060,17 +1055,9 @@ void *dtl_sv_to_ptr(const dtl_sv_t *self)
       case DTL_SV_NONE:
          break;
       case DTL_SV_I32:
-#ifdef _WIN64
-         return IntToPtr(self->pAny->val.i32);
-#else
          return (void *) ((intptr_t) self->pAny->val.i32); // NOLINT(performance-no-int-to-ptr)
-#endif
       case DTL_SV_U32:
-#ifdef _WIN64
-         return UIntToPtr(self->pAny->val.u32);
-#else
          return (void *) ((uintptr_t) self->pAny->val.u32); // NOLINT(performance-no-int-to-ptr)
-#endif
       case DTL_SV_I64:
       case DTL_SV_U64:
       case DTL_SV_FLT:
