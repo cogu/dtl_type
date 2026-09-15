@@ -1,7 +1,6 @@
 CMemLeak.txt
 **/Debug/
 **/Release/
-/VisualStudio/
 build/
 build-*/
-language.settings.xml
+.vscode/

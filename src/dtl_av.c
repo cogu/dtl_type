@@ -27,7 +27,6 @@
 //////////////////////////////////////////////////////////////////////////////
 // PRIVATE FUNCTION PROTOTYPES
 //////////////////////////////////////////////////////////////////////////////
-static dtl_error_t dtl_av_insertion_sort(dtl_av_t *self, bool reverse);
 
 //////////////////////////////////////////////////////////////////////////////
 // PRIVATE VARIABLES
@@ -244,86 +243,16 @@ dtl_error_t dtl_av_sort(dtl_av_t *self, dtl_key_func_t *key, bool reverse)
       {
          return DTL_NOT_IMPLEMENTED_ERROR;
       }
-      return dtl_av_insertion_sort(self, reverse);
+      adt_error_t err = adt_ary_sort(self->pAny, dtl_sv_vlt, reverse);
+      if (err == ADT_NO_ERROR)
+      {
+         return DTL_NO_ERROR;
+      }
+      if (err == ADT_OBJECT_COMPARE_ERROR)
+      {
+         return DTL_TYPE_ERROR;
+      }
+      return DTL_INVALID_ARGUMENT_ERROR;
    }
    return DTL_INVALID_ARGUMENT_ERROR;
-}
-
-//////////////////////////////////////////////////////////////////////////////
-// PRIVATE FUNCTIONS
-//////////////////////////////////////////////////////////////////////////////
-
-static dtl_error_t dtl_av_insertion_sort(dtl_av_t *self, bool reverse)
-{
-   int32_t array_len = self->pAny->s32CurLen;
-   if (array_len > 1)
-   {
-      int32_t unsorted_start = 1;
-
-      while (unsorted_start < array_len)
-      {
-         bool result = false;
-         dtl_error_t error_code = DTL_NO_ERROR;
-         dtl_dv_t *left = self->pAny->pFirst[unsorted_start - 1];
-         dtl_dv_t *right = self->pAny->pFirst[unsorted_start];
-         assert((left != NULL) && (right != NULL));
-         dtl_dv_type_id left_type = dtl_dv_type(left);
-         dtl_dv_type_id right_type = dtl_dv_type(right);
-         if ((left_type == DTL_DV_SCALAR) && (right_type == DTL_DV_SCALAR))
-         {
-            error_code = dtl_sv_lt((dtl_sv_t *) left, (dtl_sv_t *) right, &result);
-         }
-         else
-         {
-            return DTL_TYPE_ERROR;
-         }
-
-         if (error_code != DTL_NO_ERROR)
-         {
-            return error_code;
-         }
-
-         if (reverse)
-         {
-            result = !result;
-         }
-         if (!result)
-         {
-            int32_t i;
-            self->pAny->pFirst[unsorted_start] = left;
-            for (i = unsorted_start - 1; i > 0; i--)
-            {
-               left = self->pAny->pFirst[i - 1];
-               left_type = dtl_dv_type(left);
-               if (left_type == DTL_DV_SCALAR)
-               {
-                  error_code = dtl_sv_lt((dtl_sv_t *) left, (dtl_sv_t *) right, &result);
-                  if (error_code != DTL_NO_ERROR)
-                  {
-                     return error_code;
-                  }
-               }
-               else
-               {
-                  return DTL_TYPE_ERROR;
-               }
-               if (reverse)
-               {
-                  result = !result;
-               }
-               if (!result)
-               {
-                  self->pAny->pFirst[i] = left;
-               }
-               else
-               {
-                  break;
-               }
-            }
-            self->pAny->pFirst[i] = right;
-         }
-         unsorted_start++;
-      }
-   }
-   return DTL_NO_ERROR;
 }

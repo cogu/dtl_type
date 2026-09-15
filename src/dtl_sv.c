@@ -1305,6 +1305,25 @@ dtl_error_t dtl_sv_lt(const dtl_sv_t *self, const dtl_sv_t *other, bool *result)
    return DTL_INVALID_ARGUMENT_ERROR;
 }
 
+int dtl_sv_vlt(const void *a, const void *b)
+{
+   if ((a != NULL) && (b != NULL))
+   {
+      const dtl_dv_t *dv_a = (const dtl_dv_t *) a;
+      const dtl_dv_t *dv_b = (const dtl_dv_t *) b;
+      if ((dtl_dv_type(dv_a) == DTL_DV_SCALAR) && (dtl_dv_type(dv_b) == DTL_DV_SCALAR))
+      {
+         bool result = false;
+         dtl_error_t err = dtl_sv_lt((const dtl_sv_t *) dv_a, (const dtl_sv_t *) dv_b, &result);
+         if (err == DTL_NO_ERROR)
+         {
+            return result ? 1 : 0;
+         }
+      }
+   }
+   return -1;
+}
+
 const adt_bytes_t *dtl_sv_get_bytes(const dtl_sv_t *self)
 {
    const adt_bytes_t *retval = NULL;

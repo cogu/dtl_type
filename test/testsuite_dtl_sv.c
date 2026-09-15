@@ -42,6 +42,7 @@ static void test_dtl_sv_dv_wrapper(CuTest *tc);
 static void test_dtl_sv_conversions(CuTest *tc);
 static void test_dtl_sv_lt_comparisons(CuTest *tc);
 static void test_dtl_sv_take_bytes(CuTest *tc);
+static void test_dtl_sv_vlt(CuTest *tc);
 
 //////////////////////////////////////////////////////////////////////////////
 // PUBLIC FUNCTIONS
@@ -62,6 +63,7 @@ CuSuite *testsuite_dtl_sv(void)
    SUITE_ADD_TEST(suite, test_dtl_sv_conversions);
    SUITE_ADD_TEST(suite, test_dtl_sv_lt_comparisons);
    SUITE_ADD_TEST(suite, test_dtl_sv_take_bytes);
+   SUITE_ADD_TEST(suite, test_dtl_sv_vlt);
 
    return suite;
 }
@@ -482,4 +484,34 @@ static void test_dtl_sv_take_bytes(CuTest *tc)
    const adt_bytes_t *read_bytes = dtl_sv_get_bytes(sv);
    CuAssertPtrEquals(tc, bytes, (void *) read_bytes);
    dtl_dec_ref(sv); // frees bytes
+}
+
+static void test_dtl_sv_vlt(CuTest *tc)
+{
+   dtl_sv_t *i1 = dtl_sv_make_i32(10);
+   dtl_sv_t *i2 = dtl_sv_make_i32(20);
+   dtl_sv_t *str = dtl_sv_make_cstr("hello");
+   dtl_av_t *av = dtl_av_new();
+
+   // Less than
+   CuAssertIntEquals(tc, 1, dtl_sv_vlt(i1, i2));
+   // Greater than
+   CuAssertIntEquals(tc, 0, dtl_sv_vlt(i2, i1));
+   // Equal
+   CuAssertIntEquals(tc, 0, dtl_sv_vlt(i1, i1));
+
+   // NULL handling
+   CuAssertIntEquals(tc, -1, dtl_sv_vlt(NULL, i2));
+   CuAssertIntEquals(tc, -1, dtl_sv_vlt(i1, NULL));
+
+   // Incompatible types
+   CuAssertIntEquals(tc, -1, dtl_sv_vlt(i1, str));
+
+   // Non-scalar DV
+   CuAssertIntEquals(tc, -1, dtl_sv_vlt(i1, av));
+
+   dtl_dec_ref(i1);
+   dtl_dec_ref(i2);
+   dtl_dec_ref(str);
+   dtl_dec_ref(av);
 }
