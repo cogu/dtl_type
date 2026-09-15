@@ -179,9 +179,9 @@ bool dtl_av_is_empty(const dtl_av_t *self);
 bool dtl_av_exists(const dtl_av_t *self, int32_t index);
 
 /**
- * \brief Sorts scalar elements in the array using insertion sort.
+ * \brief Sorts scalar elements in the array using introsort.
  * \param self Pointer to array.
- * \param key Optional key extraction function (currently must be NULL).
+ * \param key Optional key extraction function (currently reserved for future use, must be NULL).
  * \param reverse If true, sorts in descending order; otherwise ascending.
  * \return DTL_NO_ERROR on success, or error code.
  */

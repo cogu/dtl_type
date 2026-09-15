@@ -540,6 +540,15 @@ struct dtl_hv_tag *dtl_sv_to_hv(const dtl_sv_t *self);
  */
 dtl_error_t dtl_sv_lt(const dtl_sv_t *self, const dtl_sv_t *other, bool *result);
 
+/**
+ * \brief Void comparator wrapper around dtl_sv_lt compatible with adt_vlt_func_t.
+ *
+ * \param a Pointer to first dynamic value (expected to be dtl_sv_t).
+ * \param b Pointer to second dynamic value (expected to be dtl_sv_t).
+ * \return 1 if a < b, 0 if a >= b, or -1 on error (e.g. type mismatch, not scalars, NULL).
+ */
+int dtl_sv_vlt(const void *a, const void *b);
+
 // Macros
 #define dtl_sv_none() (&g_dtl_sv_none)
 
