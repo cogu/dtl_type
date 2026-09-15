@@ -315,7 +315,7 @@ dtl_dv_type_id dtl_sv_dv_type(const dtl_sv_t *self)
    {
       return dtl_dv_type(self->pAny->val.dv);
    }
-   return DTL_DV_INVALID;
+   return DTL_DV_NULL;
 }
 
 // Setters

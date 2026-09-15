@@ -99,7 +99,7 @@ static void test_dtl_dv_inc_dec_ref(CuTest *tc)
 
 static void test_dtl_dv_type(CuTest *tc)
 {
-   CuAssertIntEquals(tc, DTL_DV_INVALID, (int) dtl_dv_type(NULL));
+   CuAssertIntEquals(tc, DTL_DV_NULL, (int) dtl_dv_type(NULL));
 
    dtl_dv_t *null_dv = dtl_dv_null();
    CuAssertIntEquals(tc, DTL_DV_NULL, (int) dtl_dv_type(null_dv));

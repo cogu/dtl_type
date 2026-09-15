@@ -362,6 +362,11 @@ static void test_dtl_sv_dv_wrapper(CuTest *tc)
    CuAssertIntEquals(tc, DTL_DV_HASH, (int) dtl_sv_dv_type(sv));
    CuAssertPtrEquals(tc, hv, dtl_sv_to_hv(sv));
    dtl_dec_ref(sv);
+   CuAssertIntEquals(tc, DTL_DV_NULL, (int) dtl_sv_dv_type(NULL));
+
+   dtl_sv_t *scalar = dtl_sv_make_i32(42);
+   CuAssertIntEquals(tc, DTL_DV_NULL, (int) dtl_sv_dv_type(scalar));
+   dtl_dec_ref(scalar);
 }
 
 static void test_dtl_sv_conversions(CuTest *tc)

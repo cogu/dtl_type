@@ -55,8 +55,6 @@ void dtl_dv_delete(dtl_dv_t *dv)
    {
       switch (dtl_dv_type(dv))
       {
-      case DTL_DV_INVALID:
-         break;
       case DTL_DV_NULL:
          free(dv);
          break;
@@ -101,7 +99,7 @@ dtl_dv_type_id dtl_dv_type(const dtl_dv_t *dv)
 {
    if (dv == NULL)
    {
-      return DTL_DV_INVALID;
+      return DTL_DV_NULL;
    }
    uint8_t type_id = (uint8_t) ((dv->u32Flags & DTL_DV_TYPE_MASK) >> DTL_DV_TYPE_SHIFT);
    return (dtl_dv_type_id) type_id;
