@@ -75,6 +75,7 @@ static void test_dtl_sv_create(CuTest *tc)
    dtl_sv_t *sv = dtl_sv_new();
    CuAssertPtrNotNull(tc, sv);
    CuAssertIntEquals(tc, DTL_SV_NONE, (int) dtl_sv_type(sv));
+   CuAssertIntEquals(tc, DTL_DV_SCALAR, (int) dtl_dv_type((const dtl_dv_t *) sv));
    dtl_sv_delete(sv);
 }
 
