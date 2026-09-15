@@ -62,24 +62,47 @@ First clone this repo and its dependencies into a common directory (such as ~/re
 For Windows, use a "Native tools command prompt" from your Visual Studio installation. It comes with a cmake binary that
 by default chooses the appropriate compiler version.
 
-### Running unit tests (Linux and Windows)
+### Using CMake Presets (Clang 18 + Ninja)
+
+```bash
+# Run unit tests
+cmake --preset clang-test
+cmake --build --preset clang-test
+ctest --preset clang-test
+
+# Address and Undefined Behavior Sanitizers (ASan + UBSan)
+cmake --preset clang-asan
+cmake --build --preset clang-asan
+ctest --preset clang-asan
+
+# Static Analysis
+cmake --preset clang-tidy
+cmake --build --preset clang-tidy
+```
+
+### Manual CMake Workflows (Linux and Windows)
+
+For Windows, use a "Native tools command prompt" from your Visual Studio installation. It comes with a cmake binary that
+by default chooses the appropriate compiler version.
+
+#### Running unit tests
 
 Configure:
 
 ```sh
-cmake -S . -B build -DUNIT_TEST=ON
+cmake -S . -B build-test -GNinja -DUNIT_TEST=ON
 ```
 
 Build:
 
 ```sh
-cmake --build build --target dtl_type_unit
+cmake --build build-test
 ```
 
 Run test cases:
 
-```cmd
-cd build && ctest
+```sh
+ctest --test-dir build-test --output-on-failure
 ```
 
 ## Usage
