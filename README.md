@@ -2,25 +2,26 @@
 
 # dtl_type
 
-A dynamic type system for the C programming language.
+A lightweight, reference-counted dynamic type and variant library for C.
 
-## What is it?
+## Overview
 
-A Dynamically Typed Language (or DTL) is a generic term for a modern scripting language such as Python, Perl or Javascript.
-Such languages usually contains many parts:
+In C, building heterogeneous and deeply nested data structures (such as parsed JSON, dynamic configurations, or arbitrary object graphs) requires complex manual memory management and ad-hoc union types.
 
-* Language syntax
-* Compiler
-* Runtime Interpreter (or Virtual Machine)
-  * Type system
-* Language Libraries
+`dtl_type` provides a clean runtime type system and dynamic container library built around:
 
-In dtl_type I have implemnted just the type system without any of the other language components. It is inspired by the Perl type system and uses similar terminology.
+- **Polymorphic Dynamic Values (`dtl_dv_t`)**: A unified base handle for all dynamic types.
+- **Scalar Variants (`dtl_sv_t`)**: Flexible containers holding numbers (signed/unsigned 32/64-bit integers, floats, doubles), booleans, strings, raw byte arrays, or custom pointers with automatic destructor callbacks. Includes safe runtime type inspection and cross-type conversion routines.
+- **Dynamic Arrays (`dtl_av_t`)**: Ordered, growable collections that can contain any combination of dynamic values (scalars, nested arrays, or hashes).
+- **Hash Maps (`dtl_hv_t`)**: String-keyed lookup tables storing arbitrary dynamic values.
+- **Automatic Lifetime Management**: Pure reference counting across all objects. When a root container is released, all nested children are automatically cleaned up without memory leaks.
 
-Using this library you can easily build arbitrarily complex data structures in runtime using the C programming language.
-All values are reference counted which significantly simplifies memory management. The initial reference count of newly created values is 1.
+## Key Features
 
-Some programming languages (or libraries) might provide a special kind of data type called *Variant*, this library offers a similar solution for the C programming language.
+- **Recursive Reference Counting**: Simplifies memory management when building complex, shared object trees.
+- **Safe Type Conversions**: Built-in conversion between integers, floating-point numbers, booleans, and strings with success flags.
+- **Custom Pointer Management**: Scalars can manage external pointers and automatically trigger a user-defined destructor callback when freed.
+- **Lightweight & Portable**: Written in standard C99 with zero external dependencies beyond `adt` and `cutil`.
 
 ## Where is it used?
 
@@ -103,72 +104,6 @@ Run test cases:
 
 ```sh
 ctest --test-dir build-test --output-on-failure
-```
-
-## Usage
-
-``` C
-#include <stdio.h>
-#include <stdlib.h>
-#include "dtl_type.h"
-#include "adt_str.h"
-
-int main(int argc, char **argv)
-{
-   int i;
-   dtl_sv_t *sv;
-
-   /*** Scalar values ***/
-   dtl_sv_t *sv1 = dtl_sv_make_i32(125);
-   dtl_sv_t *sv2 = dtl_sv_make_cstr("Hello World");
-   dtl_sv_t *sv3 = dtl_sv_make_dbl(10.2);
-
-   printf("%d\n", dtl_sv_to_i32(sv1, NULL));
-   printf("%s\n", dtl_sv_to_cstr(sv2));
-   printf("%f\n", dtl_sv_to_dbl(sv3, NULL));
-   printf("\n");
-
-   /*** Array Values ***/
-   dtl_av_t *av = dtl_av_new();
-   dtl_av_push(av, (dtl_dv_t*) sv1, true);
-   dtl_av_push(av, (dtl_dv_t*) sv2, true);
-   dtl_av_push(av, (dtl_dv_t*) sv3, true);
-   //reference count for sv1, sv2 and sv3 are now set to 2
-
-   /*** Printing Array Values***/
-   for (i = 0; i < dtl_av_length(av); i++)
-   {
-      sv = (dtl_sv_t*) dtl_av_value(av, i);
-      const char *cstr = dtl_sv_to_cstr(sv);
-      printf("%s\n", cstr );
-   }
-   dtl_dec_ref(av); //deletes av. Reference count for sv1, sv2 and sv3 is now 1
-   printf("\n");
-
-   /*** Hash Values ***/
-   dtl_hv_t *hv = dtl_hv_new();
-   dtl_hv_set_cstr(hv, "first", (dtl_dv_t*) sv1, true);
-   dtl_hv_set_cstr(hv, "second",(dtl_dv_t*) sv2, true);
-   dtl_hv_set_cstr(hv, "third", (dtl_dv_t*) sv3, true);
-   //reference count for sv1,sv2 and sv3 is now 2
-
-   const char *key;
-   dtl_hv_iter_init(hv);
-   while ( (sv = (dtl_sv_t*) dtl_hv_iter_next_cstr(hv, &key)) )
-   {
-      sv = (dtl_sv_t*) dtl_hv_get_cstr(hv, key);
-      printf("%s: %s\n", key, dtl_sv_to_cstr(sv));
-   }
-   dtl_dec_ref(hv); //deletes hv
-   //reference count for sv1, sv2 and sv3 is now 1
-
-   /*** cleanup ***/
-   dtl_dec_ref(sv1); //deletes sv1 (reference count -> 0)
-   dtl_dec_ref(sv2); //deletes sv2 (reference count -> 0)
-   dtl_dec_ref(sv3); //deletes sv3 (reference count -> 0)
-
-   return 0;
-}
 ```
 
 ## Dynamic Value (DV)
