@@ -214,10 +214,10 @@ dtl_sv_t *dtl_sv_make_cstr(const char *str);
 /**
  * \brief Creates a scalar wrapping a dynamic value.
  * \param dv Dynamic value to wrap.
- * \param auto_inc_ref If true, increments reference count of dv.
+ * \param auto_increment_ref If true, increments reference count of dv.
  * \return Pointer to new scalar, or NULL on failure.
  */
-dtl_sv_t *dtl_sv_make_dv(dtl_dv_t *dv, bool auto_inc_ref);
+dtl_sv_t *dtl_sv_make_dv(dtl_dv_t *dv, bool auto_increment_ref);
 
 /**
  * \brief Creates a scalar taking ownership of an adt_bytes_t object.
@@ -371,9 +371,9 @@ void dtl_sv_set_bstr(dtl_sv_t *self, const uint8_t *begin, const uint8_t *end);
  * \brief Sets scalar value to wrap a dynamic value.
  * \param self Pointer to scalar value.
  * \param dv Dynamic value to wrap.
- * \param auto_inc_ref If true, increments reference count of dv.
+ * \param auto_increment_ref If true, increments reference count of dv.
  */
-void dtl_sv_set_dv(dtl_sv_t *self, dtl_dv_t *dv, bool auto_inc_ref);
+void dtl_sv_set_dv(dtl_sv_t *self, dtl_dv_t *dv, bool auto_increment_ref);
 
 /**
  * \brief Sets scalar value taking ownership of an adt_bytes_t object.

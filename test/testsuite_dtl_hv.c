@@ -33,7 +33,7 @@ static void test_dtl_hv_iter(CuTest *tc);
 static void test_dtl_hv_remove_cstr(CuTest *tc);
 static void test_dtl_hv_exists_cstr(CuTest *tc);
 static void test_dtl_hv_set_overwrite(CuTest *tc);
-static void test_dtl_hv_auto_inc_ref(CuTest *tc);
+static void test_dtl_hv_auto_increment_ref(CuTest *tc);
 static void test_dtl_hv_null_safety(CuTest *tc);
 
 //////////////////////////////////////////////////////////////////////////////
@@ -50,7 +50,7 @@ CuSuite *testsuite_dtl_hv(void)
    SUITE_ADD_TEST(suite, test_dtl_hv_remove_cstr);
    SUITE_ADD_TEST(suite, test_dtl_hv_exists_cstr);
    SUITE_ADD_TEST(suite, test_dtl_hv_set_overwrite);
-   SUITE_ADD_TEST(suite, test_dtl_hv_auto_inc_ref);
+   SUITE_ADD_TEST(suite, test_dtl_hv_auto_increment_ref);
    SUITE_ADD_TEST(suite, test_dtl_hv_null_safety);
 
    return suite;
@@ -210,7 +210,7 @@ static void test_dtl_hv_set_overwrite(CuTest *tc)
    dtl_dec_ref(hv);
 }
 
-static void test_dtl_hv_auto_inc_ref(CuTest *tc)
+static void test_dtl_hv_auto_increment_ref(CuTest *tc)
 {
    dtl_hv_t *hv = dtl_hv_new();
    dtl_sv_t *val = dtl_sv_make_i32(99);

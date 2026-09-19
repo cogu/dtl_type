@@ -244,12 +244,12 @@ dtl_sv_t *dtl_sv_make_cstr(const char *str)
    return self;
 }
 
-dtl_sv_t *dtl_sv_make_dv(dtl_dv_t *dv, bool auto_inc_ref)
+dtl_sv_t *dtl_sv_make_dv(dtl_dv_t *dv, bool auto_increment_ref)
 {
    dtl_sv_t *self = dtl_sv_new();
    if (self != NULL)
    {
-      dtl_sv_set_dv(self, dv, auto_inc_ref);
+      dtl_sv_set_dv(self, dv, auto_increment_ref);
    }
    return self;
 }
@@ -424,13 +424,13 @@ void dtl_sv_set_bstr(dtl_sv_t *self, const uint8_t *begin, const uint8_t *end)
    }
 }
 
-void dtl_sv_set_dv(dtl_sv_t *self, dtl_dv_t *dv, bool auto_inc_ref)
+void dtl_sv_set_dv(dtl_sv_t *self, dtl_dv_t *dv, bool auto_increment_ref)
 {
    if (self != NULL)
    {
       dtl_sv_set_type(self, DTL_SV_DV);
       self->pAny->val.dv = dv;
-      if (auto_inc_ref)
+      if (auto_increment_ref)
       {
          dtl_dv_inc_ref(dv);
       }
