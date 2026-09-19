@@ -1,5 +1,5 @@
 # Doxyfile for Sphinx + Breathe integration
-PROJECT_NAME           = "dtl_type"
+PROJECT_NAME           = "dtl-type"
 PROJECT_NUMBER         = "0.3.0"
 PROJECT_BRIEF          = "Reference-counted dynamic type and variant library for C"
 

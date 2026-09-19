@@ -1,9 +1,9 @@
-dtl_type
+dtl-type
 ========
 
-**dtl_type** is a lightweight, reference-counted dynamic type and variant library written in C (C99 and later). It provides a clean runtime type system and dynamic container library for C applications.
+**dtl-type** is a lightweight, reference-counted dynamic type and variant library written in C (C99 and later). It provides a clean runtime type system and dynamic container library for C applications.
 
-In C, building heterogeneous and deeply nested data structures (such as parsed JSON, dynamic configurations, or arbitrary object graphs) requires complex manual memory management and ad-hoc union types. ``dtl_type`` simplifies this by providing polymorphic dynamic values, variant scalars, dynamic arrays, and string-keyed hash maps with recursive reference-counted memory management.
+In C, building heterogeneous and deeply nested data structures (such as parsed JSON, dynamic configurations, or arbitrary object graphs) requires complex manual memory management and ad-hoc union types. ``dtl-type`` simplifies this by providing polymorphic dynamic values, variant scalars, dynamic arrays, and string-keyed hash maps with recursive reference-counted memory management.
 
 Dynamic Value (DV)
 ------------------
@@ -81,7 +81,7 @@ Hash values are key-value lookup tables where the key is a string and the value 
 Components Catalog
 ==================
 
-Below is a summary of all modules provided by the dtl_type library:
+Below is a summary of all modules provided by the dtl-type library:
 
 .. list-table::
    :header-rows: 1

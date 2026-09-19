@@ -1,6 +1,6 @@
-![unit tests](https://github.com/cogu/dtl_type/workflows/unit%20tests/badge.svg)
+![unit tests](https://github.com/cogu/dtl-type/workflows/unit%20tests/badge.svg)
 
-# dtl_type
+# dtl-type
 
 A lightweight, reference-counted dynamic type and variant library for C.
 
@@ -8,7 +8,7 @@ A lightweight, reference-counted dynamic type and variant library for C.
 
 In C, building heterogeneous and deeply nested data structures (such as parsed JSON, dynamic configurations, or arbitrary object graphs) requires complex manual memory management and ad-hoc union types.
 
-`dtl_type` provides a clean runtime type system and dynamic container library built around:
+`dtl-type` provides a clean runtime type system and dynamic container library built around:
 
 - **Polymorphic Dynamic Values (`dtl_dv_t`)**: A unified base handle for all dynamic types.
 - **Scalar Variants (`dtl_sv_t`)**: Flexible containers holding numbers (signed/unsigned 32/64-bit integers, floats, doubles), booleans, strings, raw byte arrays, or custom pointers with automatic destructor callbacks. Includes safe runtime type inspection and cross-type conversion routines.
@@ -39,7 +39,7 @@ The unit test project(s) assume that the repos are cloned side-by-side to a comm
 
 * adt
 * cutil
-* dtl_type (this repo)
+* dtl-type (this repo)
 
 ### Git Example
 
@@ -48,13 +48,13 @@ cd ~
 mkdir repo && cd repo
 git clone https://github.com/cogu/adt.git
 git clone https://github.com/cogu/cutil.git
-git clone https://github.com/cogu/dtl_type.git
-cd dtl_type
+git clone https://github.com/cogu/dtl-type.git
+cd dtl-type
 ```
 
 ## Related projects
 
-The [cogu/dtl_json](https://github.com/cogu/dtl_json) project provides JSON serialization and deserialization routines based on the dtl_type system.
+The [cogu/dtl_json](https://github.com/cogu/dtl_json) project provides JSON serialization and deserialization routines based on the dtl-type system.
 
 ## Building with CMake
 

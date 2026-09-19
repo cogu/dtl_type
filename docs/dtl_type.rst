@@ -1,7 +1,7 @@
 Aggregate Header (dtl_type)
 ============================
 
-The ``dtl_type.h`` header is the primary aggregate header for the ``dtl_type`` library. Including this file automatically includes all public component headers:
+The ``dtl_type.h`` header is the primary aggregate header for the ``dtl-type`` library. Including this file automatically includes all public component headers:
 
 .. code-block:: c
 
@@ -22,4 +22,4 @@ API Reference
 -------------
 
 .. doxygenfile:: dtl_type.h
-   :project: dtl_type
+   :project: dtl-type

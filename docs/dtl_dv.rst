@@ -1,7 +1,7 @@
 Dynamic Value Base (dtl_dv)
 ============================
 
-The ``dtl_dv`` module defines the polymorphic base structure and reference counting mechanism for all dynamic types in the ``dtl_type`` library.
+The ``dtl_dv`` module defines the polymorphic base structure and reference counting mechanism for all dynamic types in the ``dtl-type`` library.
 
 Every dynamic value (scalars, arrays, hashes) shares a common header (defined by ``DTL_DV_HEAD``) containing an internal pointer, reference count, and type flags. This enables unified memory management, runtime type identification, and automatic recursive destruction.
 

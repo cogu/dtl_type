@@ -36,7 +36,7 @@ jobs:
         repository: cogu/cutil
         path: cutil
 
-    - name: checkout dtl_type
+    - name: checkout dtl-type
       uses: actions/checkout@v4
       with:
         path: main

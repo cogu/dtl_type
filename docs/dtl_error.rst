@@ -1,7 +1,7 @@
 Error Handling (dtl_error)
 ===========================
 
-The ``dtl_error`` module defines standard error constants and types returned by functions throughout the ``dtl_type`` library.
+The ``dtl_error`` module defines standard error constants and types returned by functions throughout the ``dtl-type`` library.
 
 Error Constants
 ---------------

@@ -1,13 +1,13 @@
 # DTL Type Submodule TODO List
 
-This document tracks identified architectural enhancements, planned features, and API improvements across the `dtl_type` library for future branches/releases.
+This document tracks identified architectural enhancements, planned features, and API improvements across the `dtl-type` library for future branches/releases.
 
 ---
 
 ## 1. Implement Key-Based Array Sorting (Schwartzian Transform / DSU)
 
 ### Background
-[dtl_av_sort](file:///home/cogu/repo/dtl_type/include/dtl_av.h) accepts a `key` parameter of type [dtl_key_func_t](file:///home/cogu/repo/dtl_type/include/dtl_av.h):
+[dtl_av_sort](file:///home/cogu/repo/dtl-type/include/dtl_av.h) accepts a `key` parameter of type [dtl_key_func_t](file:///home/cogu/repo/dtl-type/include/dtl_av.h):
 ```c
 typedef dtl_dv_t *(dtl_key_func_t)(const dtl_dv_t *dv);
 
