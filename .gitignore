@@ -4,3 +4,7 @@ CMemLeak.txt
 build/
 build-*/
 .vscode/
+
+# Sphinx documentation
+/docs/_build/
+**/.venv/
