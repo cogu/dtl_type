@@ -63,7 +63,7 @@ exclude_patterns = [
 
 html_theme = 'furo'
 html_title = f"{project} {release} documentation"
-html_static_path = ['_static']
+html_static_path = []
 
 source_suffix = {
     '.rst': 'restructuredtext',
